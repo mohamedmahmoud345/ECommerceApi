@@ -10,12 +10,13 @@ namespace Core.Entities
         public DateTime DateAdded { get; private set; }
 
 
-        public CartItem(Guid productId, int quantity)
+        public CartItem(Product product, int quantity)
         {
             if (quantity <= 0)
                 throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be positive");
             Id = Guid.NewGuid();
-            ProductId = productId;
+            Product = product;
+            ProductId = product.Id;
             Quantity = quantity;
             DateAdded = DateTime.UtcNow;
         }
