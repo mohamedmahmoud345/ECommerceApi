@@ -35,7 +35,7 @@ namespace Core.Entities
             }
             else
             {                
-                _items.Add(new CartItem(product.Id, quantity));
+                _items.Add(new CartItem(product, quantity));
             }
         }
         public void RemoveItem(Product product)
