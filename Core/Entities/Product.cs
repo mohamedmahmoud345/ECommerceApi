@@ -8,7 +8,7 @@ namespace Core.Entities
 {
     public class Product
     {
-        public Product(string name, string description, string imageUrl, decimal price, int stockQuantity)
+        public Product(string name, string description, string imageUrl, decimal price, int stockQuantity, Guid categroyId, Guid? adminId)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -16,6 +16,8 @@ namespace Core.Entities
             ImageUrl = imageUrl;
             Price = price;
             StockQuantity = stockQuantity;
+            CategroyId = categroyId;
+            AdminId = adminId;
         }
 
         public Guid Id { get; private set; }
@@ -25,8 +27,11 @@ namespace Core.Entities
         public decimal Price { get; private set; }
         public int StockQuantity { get; private set; }
 
-        public Admin Admin { get; private set; }
+        public Guid CategroyId { get; private set; }
         public Category Category { get; private set; }
+
+        public Guid? AdminId { get; private set; }
+        public Admin Admin { get; private set; }
 
         public void UpdateStockQuantity(int quantity)
         {
