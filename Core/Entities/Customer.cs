@@ -4,6 +4,12 @@
     {
         public Customer(string name, string email, string passwordHash, string address, string phone)
         {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name is required", nameof(name));
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Email is required", nameof(email));
+            if (string.IsNullOrWhiteSpace(passwordHash))
+                throw new ArgumentException("Password hash is required", nameof(passwordHash));
             Id = Guid.NewGuid();
             Name = name;
             Email = email;
