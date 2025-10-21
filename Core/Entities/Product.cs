@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.Entities
+﻿namespace Core.Entities
 {
     public class Product
     {
-        public Product(string name, string description, string imageUrl, decimal price, int stockQuantity, Guid categroyId, Guid? adminId)
+        public Product(string name, string description, string imageUrl, decimal price, int stockQuantity, Guid categoryId, Guid? adminId)
         {
+            if(string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
+                throw new ArgumentException(nameof(name));
+            if(price < 0)
+                throw new ArgumentOutOfRangeException(nameof(price));
+            if(stockQuantity < 0)
+                throw new ArgumentOutOfRangeException(nameof(stockQuantity));
             Id = Guid.NewGuid();
             Name = name;
             Description = description;
             ImageUrl = imageUrl;
             Price = price;
             StockQuantity = stockQuantity;
-            CategroyId = categroyId;
+            CategoryId = categoryId;
             AdminId = adminId;
         }
 
@@ -27,7 +27,7 @@ namespace Core.Entities
         public decimal Price { get; private set; }
         public int StockQuantity { get; private set; }
 
-        public Guid CategroyId { get; private set; }
+        public Guid CategoryId { get; private set; }
         public Category Category { get; private set; }
 
         public Guid? AdminId { get; private set; }
@@ -35,11 +35,15 @@ namespace Core.Entities
 
         public void UpdateStockQuantity(int quantity)
         {
+            if(quantity < 0)
+                throw new ArgumentOutOfRangeException(nameof(quantity));
             StockQuantity  = quantity;
         }
         public bool IsInStock() => StockQuantity > 0;
         public void UpdatePrice(decimal newPrice)
         {
+            if(newPrice < 0)
+                throw new ArgumentOutOfRangeException(nameof(newPrice));
             Price = newPrice;
         }
     }
