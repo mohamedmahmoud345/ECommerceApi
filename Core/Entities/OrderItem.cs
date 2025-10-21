@@ -11,8 +11,8 @@
                 throw new ArgumentOutOfRangeException(nameof(quantity));
 
             Quantity = quantity;
-            if (quantity < 0)
-                throw new ArgumentException(nameof(quantity));
+            if (UnitPrice < 0)
+                throw new ArgumentException(nameof(UnitPrice));
             UnitPrice = unitPrice;
         }
 
