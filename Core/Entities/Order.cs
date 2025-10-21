@@ -23,7 +23,7 @@ namespace Core.Entities
         public Admin? Admin { get; private set; }
         public Guid? AdminId { get; private set; }
 
-        public IReadOnlyCollection<OrderItem> Items => _items; 
+        public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly(); 
         public void AddItem(Guid productId, int quantity, decimal unitPrice)
         {
             var item = new OrderItem(Id, productId, quantity, unitPrice);
