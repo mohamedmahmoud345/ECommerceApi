@@ -25,7 +25,7 @@ namespace Core.Entities
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
-            if(quantity < 0)
+            if(quantity <= 0)
                 throw new ArgumentOutOfRangeException(nameof(quantity));
 
             var item = _items.FirstOrDefault(x => x.Product.Id == product.Id);
