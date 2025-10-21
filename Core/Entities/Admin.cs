@@ -4,6 +4,12 @@
     {
         public Admin( string name, string email, string role)
         {
+            if(string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name is required", nameof(name));
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Email is required", nameof(email));
+            if (string.IsNullOrWhiteSpace(role))
+                throw new ArgumentException("Role is required", nameof(role));
             Id = Guid.NewGuid();
             Name = name;
             Email = email;
