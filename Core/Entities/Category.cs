@@ -6,6 +6,7 @@ namespace Core.Entities
     {
         public Category(string name , string description, Guid? adminId)
         {
+            Id = Guid.NewGuid();
             Name = name;
             Description = description;
             AdminId = adminId;
@@ -17,6 +18,11 @@ namespace Core.Entities
         public Admin? Admin { get; private set; }
         public Guid? AdminId { get; private set; }
         public void UpdateDescription(string description) => Description = description;
-        public void Rename(string newName) => Name = newName;
+        public void Rename(string newName)
+        {
+            if (string.IsNullOrWhiteSpace(newName))
+                throw new ArgumentException("Name is required", nameof(newName));
+            Name = newName;
+        }
     }
 }
