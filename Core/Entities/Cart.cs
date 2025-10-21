@@ -8,16 +8,16 @@ namespace Core.Entities
         public int Quantity { get; private set; }
         public DateTime Date { get; private set; }
 
+        public Guid CustomerId { get; private set; }
         public Customer Customer { get; private set; }
         private List<CartItem> _items = new List<CartItem>();
 
-        public Cart(Guid id, int quantity, DateTime date, 
-            Customer customer)
+        public Cart(int quantity, Guid customerId)
         {
-            Id = id;
+            Id = Guid.NewGuid();
             Quantity = quantity;
-            Date = date;
-            Customer = customer;
+            Date = DateTime.UtcNow;
+            CustomerId = customerId;
         }
         public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
 
@@ -26,7 +26,7 @@ namespace Core.Entities
             var item = _items.FirstOrDefault(x => x.Product.Id == product.Id);
             if(item != null)
             {
-                item.UpdateQuantity(quantity);
+                item.UpdateQuantity(item.Quantity + quantity);
             }
             else
             {                
