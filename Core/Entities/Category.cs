@@ -7,6 +7,8 @@ namespace Core.Entities
         public Category(string name , string description, Guid? adminId)
         {
             Id = Guid.NewGuid();
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Name is required", nameof(name));
             Name = name;
             Description = description;
             AdminId = adminId;
