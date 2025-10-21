@@ -11,7 +11,7 @@ namespace Core.Entities
         public PaymentMethod Method { get; private set; }
 
         public Guid OrderId { get; private set; }
-        public Order order { get; private set; }
+        public Order Order { get; private set; }
         public Guid? AdminId { get; private set; }
         public Admin? Admin { get; private set; }
         public Payment(Guid orderId, decimal amount, PaymentMethod method, PaymentStatus status, DateTime date, Guid? adminId = null)
