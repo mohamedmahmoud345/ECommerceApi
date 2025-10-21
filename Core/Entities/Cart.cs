@@ -6,12 +6,12 @@ namespace Core.Entities
     {
         public Guid Id { get; private set; }
         public int Quantity { get; private set; }
-        public TimeSpan Date { get; private set; }
+        public DateTime Date { get; private set; }
 
         public Customer Customer { get; private set; }
         private List<CartItem> _items = new List<CartItem>();
 
-        public Cart(Guid id, int quantity, TimeSpan date, 
+        public Cart(Guid id, int quantity, DateTime date, 
             Customer customer)
         {
             Id = id;
@@ -19,7 +19,7 @@ namespace Core.Entities
             Date = date;
             Customer = customer;
         }
-        public IReadOnlyCollection<CartItem> Items => Items;
+        public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
 
         public void AddItem(Product product , int quantity)
         {
