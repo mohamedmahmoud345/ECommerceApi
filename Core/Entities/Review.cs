@@ -5,7 +5,7 @@ namespace Core.Entities
 {
     public class Review
     {
-        public Review(string comment, int rating, DateTime date, Guid customerId, Guid productId)
+        public Review(string comment, int rating,  Guid customerId, Guid productId)
         {
             Id = Guid.NewGuid();
             if (string.IsNullOrWhiteSpace(comment))
@@ -14,7 +14,7 @@ namespace Core.Entities
             if (rating < 1 || rating > 5)
                 throw new ArgumentException(nameof(rating));
             Rating = rating;
-            Date = date;
+            CreatedAt = DateTime.Now;
             CustomerId = customerId;
             ProductId = productId;
         }
@@ -22,8 +22,7 @@ namespace Core.Entities
         public Guid Id { get; private set; }
         public string Comment { get; private set; }
         public int Rating { get; private set; }
-        public DateTime Date { get;private set; }
-
+        public DateTime CreatedAt { get; private set; }
         public Guid CustomerId {  get; private set; }
         public Customer Customer { get; private set; }
 

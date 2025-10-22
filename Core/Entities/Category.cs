@@ -12,6 +12,7 @@ namespace Core.Entities
             Name = name;
             Description = description;
             AdminId = adminId;
+            CreatedAt = DateTime.UtcNow;
         }
 
         public Guid Id { get; private set; }
@@ -19,6 +20,7 @@ namespace Core.Entities
         public string Description { get; private set; }
         public Admin? Admin { get; private set; }
         public Guid? AdminId { get; private set; }
+        public DateTime CreatedAt { get; private set; }
         public void UpdateDescription(string description) => Description = description;
         public void Rename(string newName)
         {

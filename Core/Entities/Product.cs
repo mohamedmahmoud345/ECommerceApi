@@ -18,6 +18,7 @@
             StockQuantity = stockQuantity;
             CategoryId = categoryId;
             AdminId = adminId;
+            CreatedAt = DateTime.UtcNow;
         }
 
         public Guid Id { get; private set; }
@@ -26,7 +27,7 @@
         public string ImageUrl { get; private set; }
         public decimal Price { get; private set; }
         public int StockQuantity { get; private set; }
-
+        public DateTime CreatedAt { get; private set; }
         public Guid CategoryId { get; private set; }
         public Category Category { get; private set; }
 

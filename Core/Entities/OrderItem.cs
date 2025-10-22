@@ -14,6 +14,7 @@
             if (UnitPrice < 0)
                 throw new ArgumentException(nameof(UnitPrice));
             UnitPrice = unitPrice;
+            CreatedAt = DateTime.UtcNow;
         }
         private OrderItem() { }
 
@@ -24,7 +25,7 @@
         public Product Product { get; private set; }
         public int Quantity { get; private set; }
         public decimal UnitPrice { get; private set; }
-
+        public DateTime CreatedAt { get; private set; }
         public decimal TotalAmount() => Quantity * UnitPrice;
     }
 }

@@ -2,7 +2,7 @@
 {
     public class Admin
     {
-        public Admin( string name, string email, string role)
+        public Admin(string name, string email, string role)
         {
             if(string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name is required", nameof(name));
@@ -14,11 +14,13 @@
             Name = name;
             Email = email;
             Role = role;
+            CreatedAt = DateTime.UtcNow;
         }
 
         public Guid Id { get; private set; }
         public string Name { get; private set; }
         public string Email { get; private set; }
         public string Role { get; private set; }
+        public DateTime CreatedAt { get; private set; }
     }
 }

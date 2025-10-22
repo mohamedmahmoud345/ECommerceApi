@@ -11,6 +11,7 @@ namespace Core.Entities
             Status = status;
             CustomerId = customerId;
             AdminId = adminId;
+            CreatedAt = DateTime.UtcNow;
         }
 
         public Guid Id { get; private set; }
@@ -22,7 +23,7 @@ namespace Core.Entities
         public Customer Customer { get; private set; }
         public Admin? Admin { get; private set; }
         public Guid? AdminId { get; private set; }
-
+        public DateTime CreatedAt { get; private set; }
         public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly(); 
         public void AddItem(Guid productId, int quantity, decimal unitPrice)
         {

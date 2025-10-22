@@ -9,7 +9,7 @@ namespace Core.Entities
         public DateTime Date { get; private set; }
         public PaymentStatus Status { get; private set; }
         public PaymentMethod Method { get; private set; }
-
+        public DateTime CreatedAt { get; private set; }
         public Guid OrderId { get; private set; }
         public Order Order { get; private set; }
         public Guid? AdminId { get; private set; }
@@ -26,6 +26,7 @@ namespace Core.Entities
             Status = status;
             Date = date;
             AdminId = adminId;
+            CreatedAt = DateTime.UtcNow;
         }
         public void UpdateStatus(PaymentStatus newStatus)
         {
