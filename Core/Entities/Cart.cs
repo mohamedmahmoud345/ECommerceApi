@@ -1,6 +1,4 @@
-﻿using System.Net.Quic;
-
-namespace Core.Entities
+﻿namespace Core.Entities
 {
     public class Cart
     {
