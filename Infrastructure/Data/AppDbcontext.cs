@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class AppDbcontext : DbContext
+    public class AppDbContext : DbContext
     {
         public DbSet<Cart> Carts{ get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -15,10 +15,10 @@ namespace Infrastructure.Data
         public DbSet<Admin> Admins { get; set; }
 
 
-        public AppDbcontext()
+        public AppDbContext()
         {            
         }
-        public AppDbcontext(DbContextOptions<AppDbcontext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
     }
