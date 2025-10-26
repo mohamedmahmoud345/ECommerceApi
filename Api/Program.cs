@@ -16,7 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 #region add dependecies
-builder.Services.AddRepositoriesDependecies();
+builder.Services
+    .AddRepositoriesDependecies()
+    .AddServicesDependecies();
 #endregion
 
 var app = builder.Build();
