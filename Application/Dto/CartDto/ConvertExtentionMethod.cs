@@ -12,7 +12,6 @@ namespace Application.Dto.CartDto
                 Id = cart.Id,
                 Date = cart.Date,
                 CreatedAt = cart.CreatedAt,
-                Customer = cart.Customer,
                 CustomerId = cart.CustomerId,
                 Quantity = cart.Quantity,
                 TotalAmount = cart.TotalAmount,
@@ -28,13 +27,13 @@ namespace Application.Dto.CartDto
 
             return cartsDto;
         }
-        public static Cart FromDto(this CartDto cartDto)
+        public static Cart ToEntity(this CartDto cartDto)
         {
             var cart = new Cart(cartDto.CustomerId);
 
             return cart;
         }
-        public static List<Cart> FromDto(this List<CartDto> cartsDto)
+        public static List<Cart> ToEntity(this List<CartDto> cartsDto)
         {
             var carts = new List<Cart>();
             foreach(var cart in cartsDto)
