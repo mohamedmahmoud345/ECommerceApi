@@ -1,6 +1,6 @@
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-
+using Infrastructure.Dependecies;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,10 +10,14 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 // connection to SQL server
-builder.Services.AddDbContext<AppDbcontext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("conStr"));
 });
+
+#region add dependecies
+builder.Services.AddRepositoriesDependecies();
+#endregion
 
 var app = builder.Build();
 
