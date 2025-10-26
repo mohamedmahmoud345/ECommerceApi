@@ -13,7 +13,6 @@
             Id = Guid.NewGuid();
             Name = name;
             Email = email;
-            PasswordHash = passwordHash;
             Address = address;
             Phone = phone;
             CreatedAt = DateTime.UtcNow;
@@ -23,7 +22,6 @@
         public string Name { get; private set; }
         public string Email { get; private set; }
         public string Phone { get; private set; }
-        public string PasswordHash { get; private set; }
         public string Address { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public ICollection<Cart> Cart { get; private set; } = new List<Cart>();
