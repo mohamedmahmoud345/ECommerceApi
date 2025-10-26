@@ -26,10 +26,12 @@ namespace Infrastructure.Repositories
                 _context.Payments.Remove(payment);
         }
 
-        public async Task<Payment?> GetByCustomerIdAsync(Guid cusomterId)
+        public async Task<Payment?> GetByCustomerIdAsync(Guid customerId)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(x => x.CustomerId == cusomterId);
-            var payment = await _context.Payments.FirstOrDefaultAsync(x => x.OrderId == order.Id);
+            var payment = await _context.Payments
+                    .Include(p => p.Order)
+                    .Where(p => p.Order.CustomerId == customerId)
+                    .FirstOrDefaultAsync();
             return payment;
         }
 
