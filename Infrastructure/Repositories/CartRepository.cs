@@ -36,7 +36,7 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> HasActiveCartAsync(Guid customerId)
         {
-            return await _context.Carts.AnyAsync();
+            return await _context.Carts.AnyAsync(c => c.CustomerId == customerId);
         }
 
         public async Task Update(Cart entity)
