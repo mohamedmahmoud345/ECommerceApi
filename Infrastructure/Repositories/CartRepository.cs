@@ -21,18 +21,12 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var cart = _context.Carts.Find(id);
-            if(cart == null) 
-                throw new ArgumentNullException(nameof(cart));
             _context.Carts.Remove(cart);
         }
 
         public async Task<Cart?> GetByCustomerIdAsync(Guid customerId)
         {
-            var cart = await _context.Carts.FirstOrDefaultAsync(x => x.CustomerId == customerId);
-            if(cart == null )
-                throw new ArgumentNullException(nameof(cart));
-
-            return cart;
+            return await _context.Carts.FirstOrDefaultAsync(x => x.CustomerId == customerId);
         }
 
         public async Task<Cart> GetByIdAsync(Guid id)
@@ -45,9 +39,10 @@ namespace Infrastructure.Repositories
             return await _context.Carts.AnyAsync();
         }
 
-        public void Update(Cart entity)
+        public async Task Update(Cart entity)
         {
-            throw new NotImplementedException();
+            var cart = await _context.Carts.FindAsync(entity.Id);
+            _context.Carts.Update(cart);
         }
     }
 }

@@ -3,6 +3,7 @@ using Application.Interfaces.IRepositories;
 using Core.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -21,31 +22,22 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var customer = await _context.Customers.FindAsync(id);
-            if(customer == null)
-                throw new ArgumentNullException(nameof(customer));
-
             _context.Customers.Remove(customer);
         }
 
         public async Task<Customer> GetByEmailAsync(string email)
         {
-            var customer = await _context.Customers.SingleOrDefaultAsync(x => x.Email == email);
-            if(customer == null)
-                throw new ArgumentNullException(nameof(customer));
-            return customer;
+            return await _context.Customers.SingleOrDefaultAsync(x => x.Email == email);
         }
 
         public async Task<Customer> GetByIdAsync(Guid id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if(customer == null)
-                throw new ArgumentNullException(nameof(customer));
-
-            return customer;
+            return await _context.Customers.FindAsync(id);
         }
 
-        public void Update(Customer entity)
+        public async Task Update(Customer entity)
         {
+            var customer = await _context.Customers.FindAsync(entity.Id);
             _context.Customers.Update(entity);
         }
     }

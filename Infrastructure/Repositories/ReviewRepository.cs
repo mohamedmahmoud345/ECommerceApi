@@ -3,6 +3,7 @@ using Application.Interfaces.IRepositories;
 using Core.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 namespace Infrastructure.Repositories
 {
     public class ReviewRepository : IReviewRepository
@@ -22,25 +23,17 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var review = await _context.Reviews.FindAsync(id);
-            if(review == null)
-                throw new ArgumentNullException(nameof(review));
-
             _context.Reviews.Remove(review);
         }
 
         public async Task<List<Review>?> GetByCustomerIdAsync(Guid customerId)
         {
-            var reviews = await _context.Reviews.Where(x => x.CustomerId == customerId).ToListAsync();
-            return reviews;
+            return await _context.Reviews.Where(x => x.CustomerId == customerId).ToListAsync();
         }
 
         public async Task<Review> GetByIdAsync(Guid id)
         {
-            var review = await _context.Reviews.FindAsync(id);
-            if (review == null)
-                throw new ArgumentNullException(nameof(review));
-
-            return review;
+            return await _context.Reviews.FindAsync(id);
         }
 
         public async Task<List<Review>?> GetByProductIdAsync(Guid productId)
@@ -50,8 +43,9 @@ namespace Infrastructure.Repositories
             return reviews;
         }
 
-        public void Update(Review entity)
+        public async Task Update(Review entity)
         {
+            var review = await _context.Reviews.FindAsync(entity.Id);
             _context.Reviews.Update(entity);
         }
     }

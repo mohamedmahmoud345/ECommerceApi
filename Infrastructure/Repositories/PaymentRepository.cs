@@ -3,6 +3,7 @@ using Application.Interfaces.IRepositories;
 using Core.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -21,9 +22,6 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var payment = await _context.Payments.FindAsync(id);
-            if (payment == null)
-                throw new ArgumentNullException(nameof(id));
-
             _context.Payments.Remove(payment);
         }
 
@@ -31,22 +29,17 @@ namespace Infrastructure.Repositories
         {
             var order = await _context.Orders.FirstOrDefaultAsync(x => x.CustomerId == cusomterId);
             var payment = await _context.Payments.FirstOrDefaultAsync(x => x.OrderId == order.Id);
-
-            if(payment == null) 
-                throw new ArgumentNullException(nameof(payment));  
             return payment;
         }
 
         public async Task<Payment> GetByIdAsync(Guid id)
-        {
-            var payment = await _context.Payments.FindAsync(id);
-            if(payment == null) 
-                throw new ArgumentNullException(nameof(payment));
-            return payment;
+        { 
+            return await _context.Payments.FindAsync(id);
         }
 
-        public void Update(Payment entity)
+        public async Task Update(Payment entity)
         {
+            var payment = await _context.Payments.FindAsync(entity.Id);
             _context.Payments.Update(entity);
         }
     }
