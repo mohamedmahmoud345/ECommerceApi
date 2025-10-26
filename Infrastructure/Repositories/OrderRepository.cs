@@ -22,7 +22,8 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var order = await _context.Orders.FindAsync(id);
-            _context.Orders.Remove(order);
+            if(order != null) 
+                _context.Orders.Remove(order);
         }
 
         public async Task<List<Order>?> GetByCustomerIdAsync(Guid customerId)
@@ -37,7 +38,6 @@ namespace Infrastructure.Repositories
 
         public async Task Update(Order entity)
         {
-            var order = await _context.Orders.FindAsync(entity.Id);
             _context.Orders.Update(entity); 
         }
     }

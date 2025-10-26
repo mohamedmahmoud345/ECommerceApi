@@ -21,7 +21,8 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var cart = _context.Carts.Find(id);
-            _context.Carts.Remove(cart);
+            if(cart != null)
+                _context.Carts.Remove(cart);
         }
 
         public async Task<Cart?> GetByCustomerIdAsync(Guid customerId)
@@ -41,8 +42,8 @@ namespace Infrastructure.Repositories
 
         public async Task Update(Cart entity)
         {
-            var cart = await _context.Carts.FindAsync(entity.Id);
-            _context.Carts.Update(cart);
+            
+            _context.Carts.Update(entity);
         }
     }
 }

@@ -23,7 +23,8 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var review = await _context.Reviews.FindAsync(id);
-            _context.Reviews.Remove(review);
+            if(review != null) 
+                _context.Reviews.Remove(review);
         }
 
         public async Task<List<Review>?> GetByCustomerIdAsync(Guid customerId)
@@ -45,7 +46,6 @@ namespace Infrastructure.Repositories
 
         public async Task Update(Review entity)
         {
-            var review = await _context.Reviews.FindAsync(entity.Id);
             _context.Reviews.Update(entity);
         }
     }

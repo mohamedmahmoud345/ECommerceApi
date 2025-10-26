@@ -23,7 +23,8 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var product = await _context.Products.FindAsync(id);
-            _context.Products.Remove(product);
+            if(product != null)
+                _context.Products.Remove(product);
         }
 
         public async Task<List<Product>?> GetAllAsync()
@@ -43,7 +44,6 @@ namespace Infrastructure.Repositories
 
         public async Task Update(Product entity)
         {
-            var product = await _context.Products.FindAsync(entity.Id);
             _context.Products.Update(entity);
         }
     }

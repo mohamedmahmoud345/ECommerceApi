@@ -22,7 +22,8 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var customer = await _context.Customers.FindAsync(id);
-            _context.Customers.Remove(customer);
+            if (customer != null) 
+                _context.Customers.Remove(customer);
         }
 
         public async Task<Customer> GetByEmailAsync(string email)
@@ -37,7 +38,6 @@ namespace Infrastructure.Repositories
 
         public async Task Update(Customer entity)
         {
-            var customer = await _context.Customers.FindAsync(entity.Id);
             _context.Customers.Update(entity);
         }
     }

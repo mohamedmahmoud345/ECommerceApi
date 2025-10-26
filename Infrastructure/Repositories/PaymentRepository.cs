@@ -22,7 +22,8 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var payment = await _context.Payments.FindAsync(id);
-            _context.Payments.Remove(payment);
+            if (payment != null) 
+                _context.Payments.Remove(payment);
         }
 
         public async Task<Payment?> GetByCustomerIdAsync(Guid cusomterId)
@@ -39,7 +40,6 @@ namespace Infrastructure.Repositories
 
         public async Task Update(Payment entity)
         {
-            var payment = await _context.Payments.FindAsync(entity.Id);
             _context.Payments.Update(entity);
         }
     }
