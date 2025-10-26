@@ -3,7 +3,7 @@ using Core.Entities;
 
 namespace Application.Dto.CartDto
 {
-    public static class ConvertExtentionMethod
+    public static class CartConvertExtentionMethod
     {
         public static CartDto ToDto(this Cart cart)
         {
