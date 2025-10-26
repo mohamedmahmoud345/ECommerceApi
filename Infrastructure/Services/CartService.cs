@@ -17,12 +17,14 @@ namespace Infrastructure.Services
             if(entity == null) 
                 throw new ArgumentNullException(nameof(entity));
 
-            await _unitOfWork.Carts.AddAsync(entity.FromDto());
+            await _unitOfWork.Carts.AddAsync(entity.ToEntity());
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            await _unitOfWork.Carts.DeleteAsync(id);
+            await _unitOfWork.Carts.DeleteAsync(id); 
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<CartDto?> GetByCustomerIdAsync(Guid customerId)
@@ -44,7 +46,8 @@ namespace Infrastructure.Services
 
         public async Task Update(CartDto entity)
         {
-            _unitOfWork.Carts.Update(entity.FromDto());
+            _unitOfWork.Carts.Update(entity.ToEntity());
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }
