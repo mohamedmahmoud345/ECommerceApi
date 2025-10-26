@@ -2,7 +2,6 @@
 using Application.Interfaces.IRepositories;
 using Application.IUnitOfWorks;
 using Infrastructure.Data;
-using Infrastructure.Repositories;
 
 namespace Infrastructure.UnitOfWorks
 {
@@ -13,13 +12,13 @@ namespace Infrastructure.UnitOfWorks
         public UnitOfWork(AppDbContext context, IProductRepository products, IOrderRepository orders, ICartRepository carts, ICustomerRepository customers, ICategoryRepository categories, IReviewRepository reviews, IPaymentRepository payments)
         {
             _context = context;
-            Products = new ProductRepository(context);
-            Orders = new OrderRepository(context);
-            Carts = new CartRepository(context);
-            Customers = new CustomerRepository(context);
-            Categories = new CategoryRepository(context);
-            Reviews = new ReviewRepository(context);
-            Payments = new PaymentRepository(context);
+            Products = products;
+            Orders = orders;
+            Carts = carts;
+            Customers = customers;
+            Categories = categories;
+            Reviews = reviews;
+            Payments = payments;
         }
 
         public IProductRepository Products { get; }
