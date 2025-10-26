@@ -7,7 +7,7 @@ namespace Application.Interfaces.IRepositories
     {
         Task<Payment?> GetByCustomerIdAsync(Guid cusomterId);
         Task<Payment> GetByIdAsync(Guid id);
-        void Update(Payment entity);
+        Task Update(Payment entity);
         Task AddAsync(Payment entity);
         Task DeleteAsync(Guid id);
     }
