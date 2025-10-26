@@ -1,7 +1,7 @@
-﻿
-
-using Application.Interfaces.IRepositories;
+﻿using Application.Interfaces.IRepositories;
+using Application.IUnitOfWorks;
 using Infrastructure.Repositories;
+using Infrastructure.UnitOfWorks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Dependecies
@@ -18,6 +18,7 @@ namespace Infrastructure.Dependecies
             services.AddScoped<IProductRepository , ProductRepository>();   
             services.AddScoped<IReviewRepository , ReviewRepository>();
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }
     }
