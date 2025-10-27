@@ -37,7 +37,7 @@ namespace Application.Dto.CartDto
         {
             var carts = new List<Cart>();
             foreach(var cart in cartsDto)
-                carts.Add(new Cart(cart.CustomerId));
+                carts.Add(cart.ToEntity());
 
             return carts;
         }
