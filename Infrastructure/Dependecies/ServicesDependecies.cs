@@ -11,7 +11,7 @@ namespace Infrastructure.Dependecies
             (this IServiceCollection services)
         {
             services.AddScoped<ICartService, CartService>();
-
+            services.AddScoped<ICustomerService, CustomerService>();
             return services;
         }
     }
