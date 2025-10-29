@@ -1,4 +1,5 @@
 ﻿
+using Application.Features.Customers.Queries.GetCustomerByEmail;
 using Application.Features.Customers.Queries.GetCustomerById;
 using AutoMapper;
 using Core.Entities;
@@ -10,6 +11,7 @@ namespace Application.Mapping.Customers
         public CustomerProfile()
         {
             CreateMap<Customer, GetCustomerByIdResponse>();
+            CreateMap<Customer, GetCustomerByEmailResponse>();
         }
     }
 }
