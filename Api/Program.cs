@@ -1,6 +1,7 @@
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Dependecies;
+using Application;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 #region add dependecies
 builder.Services
     .AddRepositoriesDependecies()
-    .AddServicesDependecies();
+    .AddApplicationDependencies();
 #endregion
 
 var app = builder.Build();
