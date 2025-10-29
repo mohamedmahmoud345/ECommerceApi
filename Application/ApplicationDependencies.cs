@@ -1,8 +1,8 @@
 ﻿
 using Application.Mapping.Customers;
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-
 namespace Application
 {
     public static class ApplicationDependencies 
@@ -15,7 +15,7 @@ namespace Application
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             // register automapper
-            services.AddAutoMapper(cfg => cfg.AddProfile(typeof(CustomerProfile)));
+            services.AddAutoMapper(typeof(CustomerProfile).Assembly);
             return services;
         }
     }
