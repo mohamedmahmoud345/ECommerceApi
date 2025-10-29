@@ -1,5 +1,5 @@
 ﻿
-using Application.Features.Customers.Response;
+using Application.Features.Customers.Queries.GetCustomerById;
 using AutoMapper;
 using Core.Entities;
 
