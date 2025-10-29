@@ -10,4 +10,13 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Customers\Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.1.0" />
+    <PackageReference Include="MediatR" Version="13.1.0" />
+  </ItemGroup>
+
 </Project>
