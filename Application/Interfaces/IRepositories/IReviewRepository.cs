@@ -9,7 +9,7 @@ namespace Application.Interfaces.IRepositories
         Task<List<Review>?> GetByProductIdAsync(Guid productId);
         Task<Review> GetByIdAsync(Guid id);
         Task Update(Review entity);
-        Task AddAsync(Review entity);
+        Task<Review> AddAsync(Review entity);
         Task DeleteAsync(Guid id);
     }
 }

@@ -1,6 +1,7 @@
 ﻿
 using Application.Interfaces.IRepositories;
 using Core.Entities;
+using Core.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -14,9 +15,10 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task AddAsync(Payment entity)
+        public async Task<Payment> AddAsync(Payment entity)
         {
-            await _context.Payments.AddAsync(entity);
+            var payment = await _context.Payments.AddAsync(entity);
+            return payment.Entity;
         }
 
         public async Task DeleteAsync(Guid id)

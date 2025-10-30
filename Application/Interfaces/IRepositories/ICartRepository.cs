@@ -9,7 +9,7 @@ namespace Application.Interfaces.IRepositories
         Task<bool> HasActiveCartAsync(Guid customerId);
         Task<Cart> GetByIdAsync(Guid id);
         Task Update(Cart entity);
-        Task AddAsync(Cart entity);
+        Task<Cart> AddAsync(Cart entity);
         Task DeleteAsync(Guid id);
     }
 }

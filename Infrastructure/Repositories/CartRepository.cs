@@ -13,9 +13,10 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task AddAsync(Cart cart)
+        public async Task<Cart> AddAsync(Cart entity)
         {
-            await _context.Carts.AddAsync(cart);
+            var cart = await _context.Carts.AddAsync(entity);
+            return cart.Entity;
         }
 
         public async Task DeleteAsync(Guid id)

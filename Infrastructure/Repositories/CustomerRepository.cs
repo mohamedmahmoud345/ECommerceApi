@@ -3,7 +3,6 @@ using Application.Interfaces.IRepositories;
 using Core.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -14,9 +13,10 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task AddAsync(Customer entity)
+        public async Task<Customer> AddAsync(Customer entity)
         {
-            await _context.Customers.AddAsync(entity);
+           var customer = await _context.Customers.AddAsync(entity);
+            return customer.Entity;
         }
 
         public async Task DeleteAsync(Guid id)

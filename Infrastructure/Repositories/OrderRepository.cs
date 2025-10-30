@@ -14,9 +14,10 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task AddAsync(Order entity)
+        public async Task<Order> AddAsync(Order entity)
         {
-            await _context.Orders.AddAsync(entity);
+            var order = await _context.Orders.AddAsync(entity);
+            return order.Entity;
         }
 
         public async Task DeleteAsync(Guid id)

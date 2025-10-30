@@ -8,7 +8,7 @@ namespace Application.Interfaces.IRepositories
         Task<List<Order>?> GetByCustomerIdAsync(Guid customerId); 
         Task<Order> GetByIdAsync(Guid id);
         Task Update(Order entity);
-        Task AddAsync(Order entity);
+        Task<Order> AddAsync(Order entity);
         Task DeleteAsync(Guid id);
     }
 }

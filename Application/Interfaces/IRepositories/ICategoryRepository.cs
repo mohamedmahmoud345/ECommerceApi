@@ -8,7 +8,7 @@ namespace Application.Interfaces.IRepositories
         Task<List<Category>?> GetAllAsync();
         Task<Category> GetByIdAsync(Guid id);
         Task Update(Category entity);
-        Task AddAsync(Category entity);
+        Task<Category> AddAsync(Category entity);
         Task DeleteAsync(Guid id);
     }
 }

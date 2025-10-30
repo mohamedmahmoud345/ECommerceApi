@@ -15,9 +15,10 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task AddAsync(Review entity)
+        public async Task<Review> AddAsync(Review entity)
         {
-            await _context.Reviews.AddAsync(entity);
+            var review = await _context.Reviews.AddAsync(entity);
+            return review.Entity;
         }
 
         public async Task DeleteAsync(Guid id)

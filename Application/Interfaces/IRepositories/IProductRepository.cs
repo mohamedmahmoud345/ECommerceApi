@@ -9,7 +9,7 @@ namespace Application.Interfaces.IRepositories
         Task<List<Product>?> GetAllAsync();
         Task<Product> GetByIdAsync(Guid id);
         Task Update(Product entity);
-        Task AddAsync(Product entity);
+        Task<Product> AddAsync(Product entity);
         Task DeleteAsync(Guid id);
     }
 }

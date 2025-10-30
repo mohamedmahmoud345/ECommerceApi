@@ -15,9 +15,10 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task AddAsync(Product entity)
+        public async Task<Product> AddAsync(Product entity)
         {
-            await _context.Products.AddAsync(entity);
+            var prodcut = await _context.Products.AddAsync(entity);
+            return prodcut.Entity;
         }
 
         public async Task DeleteAsync(Guid id)
