@@ -30,17 +30,17 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Review>?> GetByCustomerIdAsync(Guid customerId)
         {
-            return await _context.Reviews.Where(x => x.CustomerId == customerId).ToListAsync();
+            return await _context.Reviews.AsNoTracking().Where(x => x.CustomerId == customerId).ToListAsync();
         }
 
         public async Task<Review> GetByIdAsync(Guid id)
         {
-            return await _context.Reviews.FindAsync(id);
+            return await _context.Reviews.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<Review>?> GetByProductIdAsync(Guid productId)
         {
-            var reviews = await _context.Reviews.Where(x => x.ProductId == productId).ToListAsync();
+            var reviews = await _context.Reviews.AsNoTracking().Where(x => x.ProductId == productId).ToListAsync();
 
             return reviews;
         }

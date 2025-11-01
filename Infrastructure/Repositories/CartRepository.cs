@@ -28,12 +28,12 @@ namespace Infrastructure.Repositories
 
         public async Task<Cart?> GetByCustomerIdAsync(Guid customerId)
         {
-            return await _context.Carts.FirstOrDefaultAsync(x => x.CustomerId == customerId);
+            return await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.CustomerId == customerId);
         }
 
         public async Task<Cart> GetByIdAsync(Guid id)
         {
-            return await _context.Carts.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> HasActiveCartAsync(Guid customerId)
@@ -43,7 +43,6 @@ namespace Infrastructure.Repositories
 
         public async Task Update(Cart entity)
         {
-            
             _context.Carts.Update(entity);
         }
     }

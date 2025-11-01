@@ -13,6 +13,10 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
+        public async Task<List<Customer>> GetAllAsync()
+        {
+            return await _context.Customers.AsNoTracking().ToListAsync(); 
+        }
         public async Task<Customer> AddAsync(Customer entity)
         {
            var customer = await _context.Customers.AddAsync(entity);
@@ -28,12 +32,12 @@ namespace Infrastructure.Repositories
 
         public async Task<Customer> GetByEmailAsync(string email)
         {
-            return await _context.Customers.SingleOrDefaultAsync(x => x.Email == email);
+            return await _context.Customers.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
         }
 
         public async Task<Customer> GetByIdAsync(Guid id)
         {
-            return await _context.Customers.FindAsync(id);
+            return await _context.Customers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Update(Customer entity)

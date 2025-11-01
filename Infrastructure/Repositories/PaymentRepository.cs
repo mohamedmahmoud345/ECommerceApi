@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Payment?> GetByCustomerIdAsync(Guid customerId)
         {
-            var payment = await _context.Payments
+            var payment = await _context.Payments.AsNoTracking()
                     .Include(p => p.Order)
                     .Where(p => p.Order.CustomerId == customerId)
                     .FirstOrDefaultAsync();
@@ -39,7 +39,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Payment> GetByIdAsync(Guid id)
         { 
-            return await _context.Payments.FindAsync(id);
+            return await _context.Payments.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Update(Payment entity)

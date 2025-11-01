@@ -29,12 +29,12 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Order>?> GetByCustomerIdAsync(Guid customerId)
         {
-            return await _context.Orders.Where(x => x.CustomerId == customerId).ToListAsync();
+            return await _context.Orders.AsNoTracking().Where(x => x.CustomerId == customerId).ToListAsync();
         }
 
         public async Task<Order> GetByIdAsync(Guid id)
         {
-            return await _context.Orders.FindAsync(id);
+            return await _context.Orders.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Update(Order entity)

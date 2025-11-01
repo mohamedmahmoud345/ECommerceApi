@@ -29,12 +29,12 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Category>?> GetAllAsync()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.AsNoTracking().ToListAsync();
         }
 
         public async Task<Category> GetByIdAsync(Guid id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             return category;
         }
 
