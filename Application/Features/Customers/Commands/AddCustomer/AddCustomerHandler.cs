@@ -19,10 +19,12 @@ namespace Application.Features.Customers.Commands.AddCustomer
 
         public async Task<AddCustomerResponse?> Handle(AddCustomerCommand request, CancellationToken cancellationToken)
         {
-            var customerMapper = _mapper.Map<Customer>(request);
-            if (_unitOfWork.Customers.GetByEmailAsync(request.Email) != null)
+            var existingCustomer = await _unitOfWork.Customers.GetByEmailAsync(request.Email);
+            if (existingCustomer != null)
                 return null;
-            var customer = await _unitOfWork.Customers.AddAsync(customerMapper);
+
+            var customer = new Customer(request.Name, request.Email, request.Address, request.Phone);
+            await _unitOfWork.Customers.AddAsync(customer);
             await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<AddCustomerResponse>(customer);
         }
