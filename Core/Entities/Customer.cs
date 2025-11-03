@@ -23,10 +23,16 @@
         public string Address { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public ICollection<Cart> Cart { get; private set; } = new List<Cart>();
-        public void UpdateContact(string phone, string address)
+        public void Update(string? name, string? email, string? phone, string? address)
         {
-            Phone = phone;
-            Address = address;
+            if(!string.IsNullOrWhiteSpace(name))
+                Name = name;
+            if(!string.IsNullOrWhiteSpace(email))
+                Email = email;
+            if (!string.IsNullOrWhiteSpace(phone))
+                Phone = phone;
+            if (!string.IsNullOrWhiteSpace(address))
+                Address = address;
         }
     }
 }
