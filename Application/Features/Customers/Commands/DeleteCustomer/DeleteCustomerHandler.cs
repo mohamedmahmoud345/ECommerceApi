@@ -15,6 +15,10 @@ namespace Application.Features.Customers.Commands.DeleteCustomer
 
         public async Task<bool> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
         {
+            var cutsomer = await _unitOfWork.Customers.GetByIdAsync(request.Id);
+            if (cutsomer == null)
+                return false;
+
             await _unitOfWork.Customers.DeleteAsync(request.Id);
             await _unitOfWork.SaveChangesAsync();
             return true;
