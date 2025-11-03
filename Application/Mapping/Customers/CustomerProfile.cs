@@ -15,11 +15,8 @@ namespace Application.Mapping.Customers
         {
             CreateMap<Customer, GetCustomerByIdResponse>();
             CreateMap<Customer, GetCustomerByEmailResponse>();
-            CreateMap<AddCustomerCommand, Customer>();
             CreateMap<Customer , AddCustomerResponse>();
             CreateMap<Customer, GetAllCustomersResponse>();
-            CreateMap<UpdateCustomerCommand, Customer>();
-            
         }
     }
 }
