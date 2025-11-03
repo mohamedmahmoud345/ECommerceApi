@@ -20,8 +20,8 @@ namespace Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpGet("{pageNumber?}/{pageSize?}")]
-        public async Task<IActionResult> Get(int? pageNumber,int? pageSize)
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int? pageNumber,[FromQuery] int? pageSize)
         {
             var customers = await _mediator.Send(new GetAllCustomersQuery());
             return Ok(pagination(customers, pageNumber , pageSize));
@@ -73,12 +73,15 @@ namespace Api.Controllers
 
             return NoContent();
         }
-        [HttpPut]
-        public async Task<IActionResult> Edit(UpdateCustomerDto customerDto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(Guid id, [FromBody] UpdateCustomerDto customerDto)
         {
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
+            if (id != customerDto.Id)
+                return BadRequest("ID in URL does not match ID in body");
+
             var customerCommand = new UpdateCustomerCommand
             {
                 Id = customerDto.Id,
@@ -108,7 +111,7 @@ namespace Api.Controllers
             int count = customers.Count();
 
             int pagNumbers = (number - 1) * size;
-            var custs = customers.Skip(number)
+            var custs = customers.Skip(pagNumbers)
                 .Take(size)
                 .ToList();
 
