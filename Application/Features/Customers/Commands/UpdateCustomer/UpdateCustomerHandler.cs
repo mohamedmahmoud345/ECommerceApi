@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Features.Customers.Commands.UpdateCustomer
 {
-    public class UpdateCustomerHandler : IRequestHandler<UpdateCustomerCommand>
+    public class UpdateCustomerHandler : IRequestHandler<UpdateCustomerCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -16,15 +16,17 @@ namespace Application.Features.Customers.Commands.UpdateCustomer
             _mapper = mapper;
         }
 
-        public async Task Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
             var customer = await _unitOfWork.Customers.GetByIdAsync(request.Id);
-            if (customer != null)
-            {
-                var customerMapper = _mapper.Map<Customer>(request);
-                await _unitOfWork.Customers.Update(customerMapper);
-                await _unitOfWork.SaveChangesAsync();          
-            }
+            if (customer == null)
+                return false;
+
+            customer.Update(request.Name, request.Email,request.Phone, request.Address);
+            await _unitOfWork.Customers.Update(customer);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
         }
     }
 }
