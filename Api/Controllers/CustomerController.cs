@@ -8,7 +8,6 @@ using Application.Features.Customers.Queries.GetCustomerById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -21,18 +20,18 @@ namespace Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("{pageNumber?}/{pageSize?}")]
+        public async Task<IActionResult> Get(int? pageNumber,int? pageSize)
         {
             var customers = await _mediator.Send(new GetAllCustomersQuery());
-            return Ok(customers);
+            return Ok(pagination(customers, pageNumber , pageSize));
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
             if (customer == null)
-                return NotFound();
+                return NotFound($"Customer with ID {id} not found");
             return Ok(customer);
         }
 
@@ -41,7 +40,7 @@ namespace Api.Controllers
         {
             var customer = await _mediator.Send(new GetCustomerByEmailQuery(email));
             if (customer == null)
-                return NotFound();
+                return NotFound($"Customer with email {email} not found");
 
             return Ok(customer);
         }
@@ -60,7 +59,7 @@ namespace Api.Controllers
             var customer = await _mediator.Send(customerCommand);
 
             if (customer == null)
-                return BadRequest();
+                return BadRequest("Email already exists");
 
             return CreatedAtAction(nameof(GetById) , new {Id = customer.Id} , customer);
         }
@@ -70,7 +69,7 @@ namespace Api.Controllers
             var result =  await _mediator.Send(new DeleteCustomerCommand(id));
 
             if(result != true)
-                return BadRequest();
+                return NotFound($"customer with id {id} not found");
 
             return NoContent();
         }
@@ -78,7 +77,7 @@ namespace Api.Controllers
         public async Task<IActionResult> Edit(UpdateCustomerDto customerDto)
         {
             if(!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(ModelState);
             
             var customerCommand = new UpdateCustomerCommand
             {
@@ -89,9 +88,31 @@ namespace Api.Controllers
                 Phone = customerDto.Phone
             };
 
-            await _mediator.Send(customerCommand);
+            var success = await _mediator.Send(customerCommand);
 
-            return RedirectToAction(nameof(GetById), new { Id = customerDto.Id });
+            if (!success)
+                return NotFound($"Customer with ID {customerDto.Id} not found");
+            return NoContent();
+        }
+
+        private List<GetAllCustomersResponse> pagination
+            (List<GetAllCustomersResponse> customers, int? pageNumber, int? pageSize)
+        {
+            int number = 1;
+            if(pageNumber != null)
+                number = pageNumber.Value;
+            int size = 5;
+            if(pageSize != null)
+                size = pageSize.Value;
+
+            int count = customers.Count();
+
+            int pagNumbers = (number - 1) * size;
+            var custs = customers.Skip(number)
+                .Take(size)
+                .ToList();
+
+            return custs;
         }
     }
 }
