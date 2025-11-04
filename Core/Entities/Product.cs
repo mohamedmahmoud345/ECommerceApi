@@ -47,5 +47,23 @@
                 throw new ArgumentOutOfRangeException(nameof(newPrice));
             Price = newPrice;
         }
+        public void Rename(string name)
+        {
+            if(!string.IsNullOrWhiteSpace(name))    
+                throw new ArgumentException("Name is required", nameof(name));
+            Name = name;
+        }
+        public void ChangeDescription(string description)
+        {
+            if (string.IsNullOrEmpty(description))
+                throw new ArgumentException("Description is required", nameof(description));
+            Description = description;
+        }
+        public void ChangePhoto(string imageUrl)
+        {
+            if(string.IsNullOrWhiteSpace(imageUrl))
+                throw new ArgumentException(nameof(imageUrl));
+            ImageUrl = imageUrl;
+        }
     }
 }
