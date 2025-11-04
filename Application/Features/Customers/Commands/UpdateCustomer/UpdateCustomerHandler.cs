@@ -22,7 +22,18 @@ namespace Application.Features.Customers.Commands.UpdateCustomer
             if (customer == null)
                 return false;
 
-            customer.Update(request.Name, request.Email,request.Phone, request.Address);
+            if (!string.IsNullOrWhiteSpace(request.Name))
+                customer.Rename(request.Name);
+
+            if (!string.IsNullOrWhiteSpace(request.Email))
+                customer.ChangeEmail(request.Email);
+
+            if(!string.IsNullOrWhiteSpace(request.Address))
+                customer.ChangeAddress(request.Address);
+
+            if (!string.IsNullOrWhiteSpace(request.Phone))
+                customer.ChangePhone(request.Phone);
+
             await _unitOfWork.Customers.Update(customer);
             await _unitOfWork.SaveChangesAsync();
 
