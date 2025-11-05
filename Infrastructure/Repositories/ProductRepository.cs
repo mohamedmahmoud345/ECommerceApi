@@ -30,17 +30,17 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Product>?> GetAllAsync()
         {
-            return await _context.Products.AsNoTracking().ToListAsync();
+            return await _context.Products.AsNoTracking().Include(x => x.Category).ToListAsync();
         }
 
         public async Task<List<Product>?> GetByCategoryIdAsync(Guid id)
         {
-            return await _context.Products.AsNoTracking().Where(x => x.CategoryId == id).ToListAsync();
+            return await _context.Products.AsNoTracking().Include(x => x.Category).Where(x => x.CategoryId == id).ToListAsync();
         }
 
         public async Task<Product> GetByIdAsync(Guid id)
         {
-            return await _context.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Products.AsNoTracking().Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Update(Product entity)
