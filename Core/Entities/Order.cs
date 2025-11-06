@@ -4,13 +4,12 @@ namespace Core.Entities
 {
     public class Order
     {
-        public Order(DateTime date, OrderStatus status, Guid customerId, Guid? adminId)
+        public Order(DateTime date, OrderStatus status, Guid customerId)
         {
             Id = Guid.NewGuid();
             Date = date;
             Status = status;
             CustomerId = customerId;
-            AdminId = adminId;
             CreatedAt = DateTime.UtcNow;
         }
 
@@ -21,8 +20,6 @@ namespace Core.Entities
         public OrderStatus Status { get; private set; }
         public Guid CustomerId { get; private set; }
         public Customer Customer { get; private set; }
-        public Admin? Admin { get; private set; }
-        public Guid? AdminId { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly(); 
         public void AddItem(Guid productId, int quantity, decimal unitPrice)

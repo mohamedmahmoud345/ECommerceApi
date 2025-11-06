@@ -2,7 +2,7 @@
 {
     public class Product
     {
-        public Product(string name, string description, string imageUrl, decimal price, int stockQuantity, Guid categoryId, Guid? adminId)
+        public Product(string name, string description, string imageUrl, decimal price, int stockQuantity, Guid categoryId)
         {
             if(string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
                 throw new ArgumentException(nameof(name));
@@ -17,7 +17,6 @@
             Price = price;
             StockQuantity = stockQuantity;
             CategoryId = categoryId;
-            AdminId = adminId;
             CreatedAt = DateTime.UtcNow;
         }
 
@@ -30,9 +29,6 @@
         public DateTime CreatedAt { get; private set; }
         public Guid CategoryId { get; private set; }
         public Category Category { get; private set; }
-
-        public Guid? AdminId { get; private set; }
-        public Admin Admin { get; private set; }
 
         public void UpdateStockQuantity(int quantity)
         {

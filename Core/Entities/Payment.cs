@@ -12,9 +12,7 @@ namespace Core.Entities
         public DateTime CreatedAt { get; private set; }
         public Guid OrderId { get; private set; }
         public Order Order { get; private set; }
-        public Guid? AdminId { get; private set; }
-        public Admin? Admin { get; private set; }
-        public Payment(Guid orderId, decimal amount, PaymentMethod method, PaymentStatus status, DateTime date, Guid? adminId = null)
+        public Payment(Guid orderId, decimal amount, PaymentMethod method, PaymentStatus status, DateTime date)
         {
             if (amount <= 0)
                 throw new ArgumentOutOfRangeException(nameof(amount));
@@ -25,7 +23,6 @@ namespace Core.Entities
             Method = method;
             Status = status;
             Date = date;
-            AdminId = adminId;
             CreatedAt = DateTime.UtcNow;
         }
         public void UpdateStatus(PaymentStatus newStatus)
@@ -33,9 +30,5 @@ namespace Core.Entities
             Status = newStatus;
         }
 
-        public void AssignAdmin(Guid adminId)
-        {
-            AdminId = adminId;
-        }
     }
 }
