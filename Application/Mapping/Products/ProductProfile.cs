@@ -1,6 +1,7 @@
 ﻿
 using Application.Features.Products.Queries.GetAllProducts;
 using Application.Features.Products.Queries.GetProductById;
+using Application.Features.Products.Queries.GetProductsByCategoryId;
 using AutoMapper;
 using Core.Entities;
 
@@ -14,6 +15,9 @@ namespace Application.Mapping.Products
               .ForMember(x => x.CategoryName, src => src.MapFrom(x => x.Category.Name));
 
             CreateMap<Product, GetProductByIdResponse>()
+                .ForMember(x => x.CategoryName, src => src.MapFrom(x => x.Category.Name));
+
+            CreateMap<Product, GetProductsByCategoryIdResponse>()
                 .ForMember(x => x.CategoryName, src => src.MapFrom(x => x.Category.Name));
         }
     }
