@@ -12,8 +12,6 @@ namespace Infrastructure.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Admin> Admins { get; set; }
-
 
         public AppDbContext()
         {            
