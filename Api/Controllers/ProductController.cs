@@ -1,6 +1,7 @@
 ﻿using Application.Features.Customers.Queries.GetAllCustomers;
 using Application.Features.Products.Queries.GetAllProducts;
 using Application.Features.Products.Queries.GetProductById;
+using Application.Features.Products.Queries.GetProductsByCategoryId;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +28,7 @@ namespace Api.Controllers
             return Ok(pagination(products, pageNumber, pageSize));
 
         }
+
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById([FromQuery] Guid id)
         {
@@ -35,8 +37,21 @@ namespace Api.Controllers
                 return NotFound($"Product with ID {id} not found");
             return Ok(product);
         }
-        private List<GetAllProductsResponse> pagination
-            (List<GetAllProductsResponse> products, int? pageNumber, int? pageSize)
+
+        [HttpGet("category/{id:guid}")]
+        public async Task<IActionResult> GetByCategoryId(Guid id , int? pageNumber , int? pageSize)
+        {
+            var products = await _mediator.Send(new GetProductsByCategoryIdQuery(id));
+            if (products == null)
+                return NotFound($"Category with id {id} not found");
+
+            return Ok(pagination(products, pageNumber, pageSize));
+        }
+
+
+
+        private List<T> pagination<T>
+            (List<T> products, int? pageNumber, int? pageSize) where T : class
         {
             int number = 1;
             if (pageNumber != null)
@@ -54,5 +69,6 @@ namespace Api.Controllers
 
             return custs;
         }
+        
     }
 }
