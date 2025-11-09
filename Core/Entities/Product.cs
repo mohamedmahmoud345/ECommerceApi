@@ -45,7 +45,7 @@
         }
         public void Rename(string name)
         {
-            if(!string.IsNullOrWhiteSpace(name))    
+            if(string.IsNullOrWhiteSpace(name))    
                 throw new ArgumentException("Name is required", nameof(name));
             Name = name;
         }
@@ -60,6 +60,10 @@
             if(string.IsNullOrWhiteSpace(imageUrl))
                 throw new ArgumentException(nameof(imageUrl));
             ImageUrl = imageUrl;
+        }
+        public void ChangeCategory(Guid categoryId)
+        {
+            CategoryId = categoryId;
         }
     }
 }

@@ -1,14 +1,10 @@
-﻿
-using MediatR;
-using Microsoft.AspNetCore.Http;
-
-namespace Application.Features.Products.Commands.AddProduct
+﻿namespace Api.Dto.Product
 {
-    public class AddProductCommand : IRequest<AddProductResponse>
+    public class AddProductDto
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        public IFormFile ImageUrl { get; set; }
         public decimal Price { get; set; }
         public int StockQuantity { get; set; }
         public Guid CategoryId { get; set; }

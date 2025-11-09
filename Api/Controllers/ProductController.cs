@@ -1,12 +1,12 @@
-﻿using Application.Features.Customers.Queries.GetAllCustomers;
+﻿using Api.Dto.Product;
+using Application.Features.Products.Commands.AddProduct;
+using Application.Features.Products.Commands.DeleteProduct;
+using Application.Features.Products.Commands.UpdateProduct;
 using Application.Features.Products.Queries.GetAllProducts;
 using Application.Features.Products.Queries.GetProductById;
 using Application.Features.Products.Queries.GetProductsByCategoryId;
-using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -15,10 +15,11 @@ namespace Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
-
-        public ProductController(IMediator mediator)
+        private readonly IWebHostEnvironment _environment;
+        public ProductController(IMediator mediator , IWebHostEnvironment environment)
         {
             _mediator = mediator;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -30,7 +31,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById([FromQuery] Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var product = await _mediator.Send(new GetProductByIdQuery(id));
             if (product == null)
@@ -48,7 +49,79 @@ namespace Api.Controllers
             return Ok(pagination(products, pageNumber, pageSize));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Add(AddProductDto productDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var command = new AddProductCommand()
+            {
+                Name = productDto.Name,
+                CategoryId = productDto.CategoryId,
+                Description = productDto.Description,
+                Price = productDto.Price,
+                StockQuantity = productDto.StockQuantity,
+                ImageUrl = await GetPath(productDto.ImageUrl, "Products")
+            };
+            var success = await _mediator.Send(command);
+            if (success == null)
+                return BadRequest($"Invalid category id {productDto.CategoryId}"); 
 
+            return NoContent();
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Edit(Guid id , UpdateProductDto productDto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (id != productDto.Id)
+                return BadRequest("ID in URL does not match ID in body");
+
+            var productCommand = new UpdateProductCommand
+            {
+                Id = productDto.Id,
+                Name = productDto.Name,
+                Description = productDto.Description,
+                CategoryId = productDto.CategoryId,
+                Price = productDto.Price,
+                StockQuantity = productDto.StockQuantity,
+                ImageUrl = await GetPath(productDto.ImageUrl, "Product")
+            };
+
+            var success = await _mediator.Send(productCommand);
+            if (!success)
+                return BadRequest();
+
+            return NoContent();
+        }
+        [HttpDelete("{Id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var success = await _mediator.Send(new DeleteProductCommand(id));
+
+            if (!success)
+                return BadRequest($"customer with id {id} not found");
+
+            return NoContent();
+        }
+        private async Task<string?> GetPath(IFormFile? file , string? folder)
+        {
+            if (file == null || folder == null)
+                return null;
+            var uploads = Path.Combine(_environment.WebRootPath, folder);
+            if(!Directory.Exists(uploads))
+                Directory.CreateDirectory(uploads);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var filepath = Path.Combine(uploads, fileName);
+
+            using(var stream = new FileStream(filepath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+            return $"/{folder}/{fileName}";
+        }
 
         private List<T> pagination<T>
             (List<T> products, int? pageNumber, int? pageSize) where T : class

@@ -1,4 +1,5 @@
 ﻿
+using Application.Features.Products.Commands.AddProduct;
 using Application.Features.Products.Queries.GetAllProducts;
 using Application.Features.Products.Queries.GetProductById;
 using Application.Features.Products.Queries.GetProductsByCategoryId;
@@ -18,6 +19,9 @@ namespace Application.Mapping.Products
                 .ForMember(x => x.CategoryName, src => src.MapFrom(x => x.Category.Name));
 
             CreateMap<Product, GetProductsByCategoryIdResponse>()
+                .ForMember(x => x.CategoryName, src => src.MapFrom(x => x.Category.Name));
+
+            CreateMap<Product, AddProductResponse>()
                 .ForMember(x => x.CategoryName, src => src.MapFrom(x => x.Category.Name));
         }
     }

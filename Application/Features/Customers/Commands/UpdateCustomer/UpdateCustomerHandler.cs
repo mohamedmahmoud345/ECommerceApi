@@ -9,11 +9,9 @@ namespace Application.Features.Customers.Commands.UpdateCustomer
     public class UpdateCustomerHandler : IRequestHandler<UpdateCustomerCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public UpdateCustomerHandler(IUnitOfWork unitOfWork , IMapper mapper)
+        public UpdateCustomerHandler(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task<bool> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
