@@ -8,6 +8,6 @@
         public IFormFile? ImageUrl { get; set; }
         public decimal? Price { get; set; }
         public int? StockQuantity { get; set; }
-        public Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
     }
 }

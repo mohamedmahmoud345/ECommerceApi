@@ -67,7 +67,7 @@ namespace Api.Controllers
             if (success == null)
                 return BadRequest($"Invalid category id {productDto.CategoryId}"); 
 
-            return NoContent();
+            return CreatedAtAction(nameof(GetById), new {Id = success.Id}, success);
         }
 
         [HttpPut("{id:guid}")]
@@ -86,7 +86,7 @@ namespace Api.Controllers
                 CategoryId = productDto.CategoryId,
                 Price = productDto.Price,
                 StockQuantity = productDto.StockQuantity,
-                ImageUrl = await GetPath(productDto.ImageUrl, "Product")
+                ImageUrl = await GetPath(productDto.ImageUrl, "Products")
             };
 
             var success = await _mediator.Send(productCommand);
