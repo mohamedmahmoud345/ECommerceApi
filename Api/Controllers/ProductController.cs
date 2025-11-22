@@ -16,16 +16,16 @@ namespace Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IWebHostEnvironment _environment;
-        public ProductController(IMediator mediator , IWebHostEnvironment environment)
+        public ProductController(IMediator mediator, IWebHostEnvironment environment)
         {
             _mediator = mediator;
             _environment = environment;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? pageNumber , [FromQuery] int? pageSize)
+        public async Task<IActionResult> Get([FromQuery] int? pageNumber, [FromQuery] int? pageSize)
         {
-            var products =await _mediator.Send(new GetAllProductsQuery());
+            var products = await _mediator.Send(new GetAllProductsQuery());
             return Ok(pagination(products, pageNumber, pageSize));
 
         }
@@ -40,7 +40,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("category/{id:guid}")]
-        public async Task<IActionResult> GetByCategoryId(Guid id , int? pageNumber , int? pageSize)
+        public async Task<IActionResult> GetByCategoryId(Guid id, int? pageNumber, int? pageSize)
         {
             var products = await _mediator.Send(new GetProductsByCategoryIdQuery(id));
             if (products == null)
@@ -65,15 +65,15 @@ namespace Api.Controllers
             };
             var success = await _mediator.Send(command);
             if (success == null)
-                return BadRequest($"Invalid category id {productDto.CategoryId}"); 
+                return BadRequest($"Invalid category id {productDto.CategoryId}");
 
-            return CreatedAtAction(nameof(GetById), new {Id = success.Id}, success);
+            return CreatedAtAction(nameof(GetById), new { Id = success.Id }, success);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Edit(Guid id , UpdateProductDto productDto)
+        public async Task<IActionResult> Edit(Guid id, UpdateProductDto productDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             if (id != productDto.Id)
                 return BadRequest("ID in URL does not match ID in body");
@@ -105,18 +105,18 @@ namespace Api.Controllers
 
             return NoContent();
         }
-        private async Task<string?> GetPath(IFormFile? file , string? folder)
+        private async Task<string?> GetPath(IFormFile? file, string? folder)
         {
             if (file == null || folder == null)
                 return null;
             var uploads = Path.Combine(_environment.WebRootPath, folder);
-            if(!Directory.Exists(uploads))
+            if (!Directory.Exists(uploads))
                 Directory.CreateDirectory(uploads);
 
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
             var filepath = Path.Combine(uploads, fileName);
 
-            using(var stream = new FileStream(filepath, FileMode.Create))
+            using (var stream = new FileStream(filepath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
@@ -142,6 +142,6 @@ namespace Api.Controllers
 
             return custs;
         }
-        
+
     }
 }

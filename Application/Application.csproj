@@ -20,4 +20,8 @@
     <Folder Include="Features\Category\Commands\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Features\Category\Queries\GetCategoryById\GetCategoryByIdHandler.cs" />
+  </ItemGroup>
+
 </Project>

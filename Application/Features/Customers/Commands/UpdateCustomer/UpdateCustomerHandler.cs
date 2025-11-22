@@ -1,7 +1,5 @@
 ﻿
 using Application.IUnitOfWorks;
-using AutoMapper;
-using Core.Entities;
 using MediatR;
 
 namespace Application.Features.Customers.Commands.UpdateCustomer
@@ -16,7 +14,9 @@ namespace Application.Features.Customers.Commands.UpdateCustomer
 
         public async Task<bool> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
-            var customer = await _unitOfWork.Customers.GetByIdAsync(request.Id);
+            if (request.Id == null)
+                return false;
+            var customer = await _unitOfWork.Customers.GetByIdAsync(request.Id.Value);
             if (customer == null)
                 return false;
 

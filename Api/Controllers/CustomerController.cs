@@ -21,10 +21,10 @@ namespace Api.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? pageNumber,[FromQuery] int? pageSize)
+        public async Task<IActionResult> Get([FromQuery] int? pageNumber, [FromQuery] int? pageSize)
         {
             var customers = await _mediator.Send(new GetAllCustomersQuery());
-            return Ok(pagination(customers, pageNumber , pageSize));
+            return Ok(pagination(customers, pageNumber, pageSize));
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
@@ -61,14 +61,14 @@ namespace Api.Controllers
             if (customer == null)
                 return BadRequest("Email already exists");
 
-            return CreatedAtAction(nameof(GetById) , new {Id = customer.Id} , customer);
+            return CreatedAtAction(nameof(GetById), new { Id = customer.Id }, customer);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result =  await _mediator.Send(new DeleteCustomerCommand(id));
+            var result = await _mediator.Send(new DeleteCustomerCommand(id));
 
-            if(result != true)
+            if (result != true)
                 return NotFound($"customer with id {id} not found");
 
             return NoContent();
@@ -76,7 +76,7 @@ namespace Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(Guid id, [FromBody] UpdateCustomerDto customerDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             if (id != customerDto.Id)
@@ -102,10 +102,10 @@ namespace Api.Controllers
             (List<GetAllCustomersResponse> customers, int? pageNumber, int? pageSize)
         {
             int number = 1;
-            if(pageNumber != null)
+            if (pageNumber != null)
                 number = pageNumber.Value;
             int size = 5;
-            if(pageSize != null)
+            if (pageSize != null)
                 size = pageSize.Value;
 
             int count = customers.Count();

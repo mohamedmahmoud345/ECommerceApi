@@ -1,6 +1,5 @@
 ﻿
 using Application.IUnitOfWorks;
-using AutoMapper;
 using MediatR;
 
 namespace Application.Features.Products.Commands.UpdateProduct
@@ -16,7 +15,9 @@ namespace Application.Features.Products.Commands.UpdateProduct
 
         public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
+            if(request.Id == null)
+                return false;
+            var product = await _unitOfWork.Products.GetByIdAsync(request.Id.Value);
             if (product == null)
                 return false;
             var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId.Value);

@@ -1,9 +1,7 @@
 ﻿using Application.Features.Category.Queries.GetAllCategories;
-using Application.Features.Customers.Queries.GetAllCustomers;
+using Application.Features.Category.Queries.GetCategoryById;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -26,6 +24,15 @@ namespace Api.Controllers
             return Ok(pagination(categories , pageNumber, pageSize));
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var category = await _mediator.Send(new GetCategoryByIdQuery(id));
+            if (category == null)
+                return NotFound($"Category with ID {id} not found");
+
+            return Ok(category);
+        }
         private List<GetAllCategoriesResponse> pagination
             (List<GetAllCategoriesResponse> customers, int? pageNumber, int? pageSize)
         {
