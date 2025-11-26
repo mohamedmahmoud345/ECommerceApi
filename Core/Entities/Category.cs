@@ -29,6 +29,7 @@ namespace Core.Entities
         {
             if (string.IsNullOrWhiteSpace(newDesc))
                 throw new ArgumentException("Discription is required", nameof(newDesc));
+            Description = newDesc;
         }
     }
 }
