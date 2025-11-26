@@ -4,7 +4,7 @@ namespace Core.Entities
 {
     public class Category
     {
-        public Category(string name , string description)
+        public Category(string name, string description)
         {
             Id = Guid.NewGuid();
             if (string.IsNullOrWhiteSpace(name))
@@ -24,6 +24,11 @@ namespace Core.Entities
             if (string.IsNullOrWhiteSpace(newName))
                 throw new ArgumentException("Name is required", nameof(newName));
             Name = newName;
+        }
+        public void ChangeDescription(string newDesc)
+        {
+            if (string.IsNullOrWhiteSpace(newDesc))
+                throw new ArgumentException("Discription is required", nameof(newDesc));
         }
     }
 }
