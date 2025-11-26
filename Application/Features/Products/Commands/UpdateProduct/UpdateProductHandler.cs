@@ -15,26 +15,26 @@ namespace Application.Features.Products.Commands.UpdateProduct
 
         public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            if(request.Id == null)
+            if (request.Id == null)
                 return false;
             var product = await _unitOfWork.Products.GetByIdAsync(request.Id.Value);
             if (product == null)
                 return false;
             var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId.Value);
-            if (category == null) 
+            if (category == null)
                 return false;
-            else
-                product.ChangeCategory(request.CategoryId.Value);
+
+            product.ChangeCategory(request.CategoryId.Value);
 
             if (!string.IsNullOrWhiteSpace(request.Name))
                 product.Rename(request.Name);
             if (!string.IsNullOrWhiteSpace(request.Description))
                 product.ChangeDescription(request.Description);
-            if(request.StockQuantity != null && request.StockQuantity.Value > 0)
+            if (request.StockQuantity != null && request.StockQuantity.Value > 0)
                 product.UpdateStockQuantity(request.StockQuantity.Value);
-            if(request.Price != null && request.Price.Value > 0)
+            if (request.Price != null && request.Price.Value > 0)
                 product.UpdatePrice(request.Price.Value);
-            if(!string.IsNullOrWhiteSpace(request.ImageUrl))
+            if (!string.IsNullOrWhiteSpace(request.ImageUrl))
                 product.ChangePhoto(request.ImageUrl);
 
             await _unitOfWork.Products.Update(product);
