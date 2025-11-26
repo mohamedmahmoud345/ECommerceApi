@@ -6,7 +6,7 @@ namespace Application.Interfaces.IRepositories
     public interface IPaymentRepository
     {
         Task<Payment?> GetByCustomerIdAsync(Guid cusomterId);
-        Task<Payment> GetByIdAsync(Guid id);
+        Task<Payment> GetByIdAsync(Guid id, bool asNoTracking = false);
         Task Update(Payment entity);
         Task<Payment> AddAsync(Payment entity);
         Task DeleteAsync(Guid id);

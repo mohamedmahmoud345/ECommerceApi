@@ -15,18 +15,18 @@ namespace Infrastructure.Repositories
         }
         public async Task<List<Customer>> GetAllAsync()
         {
-            return await _context.Customers.AsNoTracking().ToListAsync(); 
+            return await _context.Customers.AsNoTracking().ToListAsync();
         }
         public async Task<Customer> AddAsync(Customer entity)
         {
-           var customer = await _context.Customers.AddAsync(entity);
+            var customer = await _context.Customers.AddAsync(entity);
             return customer.Entity;
         }
 
         public async Task DeleteAsync(Guid id)
         {
             var customer = await _context.Customers.FindAsync(id);
-            if (customer != null) 
+            if (customer != null)
                 _context.Customers.Remove(customer);
         }
 
@@ -35,9 +35,14 @@ namespace Infrastructure.Repositories
             return await _context.Customers.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
         }
 
-        public async Task<Customer> GetByIdAsync(Guid id)
+        public async Task<Customer> GetByIdAsync(Guid id, bool asNoTracking = false)
         {
-            return await _context.Customers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var query = _context.Customers.AsQueryable();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Update(Customer entity)

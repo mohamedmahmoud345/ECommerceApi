@@ -7,7 +7,7 @@ namespace Application.Interfaces.IRepositories
     {
         Task<List<Customer>> GetAllAsync();
         Task<Customer> GetByEmailAsync(string email);
-        Task<Customer> GetByIdAsync(Guid id);
+        Task<Customer> GetByIdAsync(Guid id, bool asNoTracking = false);
         Task Update(Customer entity);
         Task<Customer> AddAsync(Customer entity);
         Task DeleteAsync(Guid id);

@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var cart = _context.Carts.Find(id);
-            if(cart != null)
+            if (cart != null)
                 _context.Carts.Remove(cart);
         }
 
@@ -31,9 +31,14 @@ namespace Infrastructure.Repositories
             return await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.CustomerId == customerId);
         }
 
-        public async Task<Cart> GetByIdAsync(Guid id)
+        public async Task<Cart> GetByIdAsync(Guid id, bool asNoTracking = false)
         {
-            return await _context.Carts.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var query = _context.Carts.AsQueryable();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<bool> HasActiveCartAsync(Guid customerId)

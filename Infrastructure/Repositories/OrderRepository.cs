@@ -3,7 +3,6 @@ using Application.Interfaces.IRepositories;
 using Core.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -23,7 +22,7 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if(order != null) 
+            if (order != null)
                 _context.Orders.Remove(order);
         }
 
@@ -32,14 +31,19 @@ namespace Infrastructure.Repositories
             return await _context.Orders.AsNoTracking().Where(x => x.CustomerId == customerId).ToListAsync();
         }
 
-        public async Task<Order> GetByIdAsync(Guid id)
+        public async Task<Order> GetByIdAsync(Guid id, bool asNoTracking)
         {
-            return await _context.Orders.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var query = _context.Orders.AsQueryable();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Update(Order entity)
         {
-            _context.Orders.Update(entity); 
+            _context.Orders.Update(entity);
         }
     }
 }

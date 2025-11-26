@@ -7,7 +7,7 @@ namespace Application.Interfaces.IRepositories
     {
         Task<List<Review>?> GetByCustomerIdAsync(Guid customerId);
         Task<List<Review>?> GetByProductIdAsync(Guid productId);
-        Task<Review> GetByIdAsync(Guid id);
+        Task<Review> GetByIdAsync(Guid id, bool asNoTracking = false);
         Task Update(Review entity);
         Task<Review> AddAsync(Review entity);
         Task DeleteAsync(Guid id);

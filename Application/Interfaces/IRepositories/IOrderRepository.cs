@@ -5,8 +5,8 @@ namespace Application.Interfaces.IRepositories
 {
     public interface IOrderRepository
     {
-        Task<List<Order>?> GetByCustomerIdAsync(Guid customerId); 
-        Task<Order> GetByIdAsync(Guid id);
+        Task<List<Order>?> GetByCustomerIdAsync(Guid customerId);
+        Task<Order> GetByIdAsync(Guid id, bool asNoTracking = false);
         Task Update(Order entity);
         Task<Order> AddAsync(Order entity);
         Task DeleteAsync(Guid id);

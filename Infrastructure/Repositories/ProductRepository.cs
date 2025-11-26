@@ -4,7 +4,6 @@ using Application.Interfaces.IRepositories;
 using Core.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -24,7 +23,7 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var product = await _context.Products.FindAsync(id);
-            if(product != null)
+            if (product != null)
                 _context.Products.Remove(product);
         }
 
@@ -38,9 +37,14 @@ namespace Infrastructure.Repositories
             return await _context.Products.AsNoTracking().Include(x => x.Category).Where(x => x.CategoryId == id).ToListAsync();
         }
 
-        public async Task<Product> GetByIdAsync(Guid id)
+        public async Task<Product> GetByIdAsync(Guid id, bool asNoTracking = false)
         {
-            return await _context.Products.AsNoTracking().Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
+            var query = _context.Products.AsNoTracking();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Update(Product entity)

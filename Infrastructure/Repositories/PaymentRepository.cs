@@ -1,10 +1,8 @@
 ﻿
 using Application.Interfaces.IRepositories;
 using Core.Entities;
-using Core.Enums;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -24,7 +22,7 @@ namespace Infrastructure.Repositories
         public async Task DeleteAsync(Guid id)
         {
             var payment = await _context.Payments.FindAsync(id);
-            if (payment != null) 
+            if (payment != null)
                 _context.Payments.Remove(payment);
         }
 
@@ -37,9 +35,14 @@ namespace Infrastructure.Repositories
             return payment;
         }
 
-        public async Task<Payment> GetByIdAsync(Guid id)
-        { 
-            return await _context.Payments.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<Payment> GetByIdAsync(Guid id, bool asNoTracking = false)
+        {
+            var query = _context.Payments.AsNoTracking();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Update(Payment entity)
