@@ -15,9 +15,8 @@ namespace Application.Features.Products.Commands.UpdateProduct
 
         public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            if (request.Id == null)
-                return false;
-            var product = await _unitOfWork.Products.GetByIdAsync(request.Id.Value);
+
+            var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
             if (product == null)
                 return false;
             var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId.Value);

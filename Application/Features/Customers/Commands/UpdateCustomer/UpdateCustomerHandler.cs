@@ -14,9 +14,7 @@ namespace Application.Features.Customers.Commands.UpdateCustomer
 
         public async Task<bool> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
         {
-            if (request.Id == null)
-                return false;
-            var customer = await _unitOfWork.Customers.GetByIdAsync(request.Id.Value);
+            var customer = await _unitOfWork.Customers.GetByIdAsync(request.Id);
             if (customer == null)
                 return false;
 
@@ -26,7 +24,7 @@ namespace Application.Features.Customers.Commands.UpdateCustomer
             if (!string.IsNullOrWhiteSpace(request.Email))
                 customer.ChangeEmail(request.Email);
 
-            if(!string.IsNullOrWhiteSpace(request.Address))
+            if (!string.IsNullOrWhiteSpace(request.Address))
                 customer.ChangeAddress(request.Address);
 
             if (!string.IsNullOrWhiteSpace(request.Phone))
