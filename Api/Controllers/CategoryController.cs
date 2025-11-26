@@ -1,5 +1,7 @@
-﻿using Application.Features.Category.Queries.GetAllCategories;
-using Application.Features.Category.Queries.GetCategoryById;
+﻿using Api.Dto.Category;
+using Application.Features.Categories.Commands.AddCategory;
+using Application.Features.Categories.Queries.GetAllCategories;
+using Application.Features.Categories.Queries.GetCategoryById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +23,7 @@ namespace Api.Controllers
         {
             var categories = await _mediator.Send(new GetAllCategoriesQuery());
 
-            return Ok(pagination(categories , pageNumber, pageSize));
+            return Ok(pagination(categories, pageNumber, pageSize));
         }
 
         [HttpGet("{id}")]
@@ -33,6 +35,21 @@ namespace Api.Controllers
 
             return Ok(category);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AddCategoryDto categoryDto)
+        {
+            var categoryCommand = new AddCategoryCommand()
+            {
+                Name = categoryDto.Name,
+                Description = categoryDto.Description
+            };
+            var category = await _mediator.Send(categoryCommand);
+
+            return CreatedAtAction(nameof(GetById), new { Id = category.Id }, category);
+        }
+
+
         private List<GetAllCategoriesResponse> pagination
             (List<GetAllCategoriesResponse> customers, int? pageNumber, int? pageSize)
         {

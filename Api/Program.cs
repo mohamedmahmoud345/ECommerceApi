@@ -1,7 +1,8 @@
-using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using Infrastructure.Dependecies;
 using Application;
+using Application.Middlewares;
+using Infrastructure.Data;
+using Infrastructure.Dependecies;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,11 +19,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 #region add dependecies
 builder.Services
-    .AddRepositoriesDependecies()
+    .AddRepositoriesDependencies()
     .AddApplicationDependencies();
 #endregion
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -30,12 +33,16 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+
+
 app.MapControllers();
+
 
 app.Run();

@@ -4,7 +4,7 @@ using Application.IUnitOfWorks;
 using AutoMapper;
 using MediatR;
 
-namespace Application.Features.Category.Queries.GetAllCategories
+namespace Application.Features.Categories.Queries.GetAllCategories
 {
     public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesQuery, List<GetAllCategoriesResponse>>
     {

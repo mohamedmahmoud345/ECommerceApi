@@ -3,7 +3,7 @@ using Application.IUnitOfWorks;
 using AutoMapper;
 using MediatR;
 
-namespace Application.Features.Category.Queries.GetCategoryById
+namespace Application.Features.Categories.Queries.GetCategoryById
 {
     public class GetCategoryByIdHandler : IRequestHandler<GetCategoryByIdQuery, GetCategoryByIdResponse>
     {
@@ -19,7 +19,7 @@ namespace Application.Features.Category.Queries.GetCategoryById
         public async Task<GetCategoryByIdResponse?> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
             var category = await _unitOfWork.Categories.GetByIdAsync(request.Id);
-            if(category == null) 
+            if (category == null)
                 return null;
 
             return _mapper.Map<GetCategoryByIdResponse>(category);

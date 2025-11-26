@@ -1,7 +1,7 @@
 ﻿
 using MediatR;
 
-namespace Application.Features.Category.Queries.GetCategoryById
+namespace Application.Features.Categories.Queries.GetCategoryById
 {
     public class GetCategoryByIdQuery : IRequest<GetCategoryByIdResponse>
     {

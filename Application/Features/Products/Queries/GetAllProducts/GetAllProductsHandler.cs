@@ -1,7 +1,6 @@
 ﻿
 using Application.IUnitOfWorks;
 using AutoMapper;
-using Core.Entities;
 using MediatR;
 
 namespace Application.Features.Products.Queries.GetAllProducts
@@ -21,7 +20,7 @@ namespace Application.Features.Products.Queries.GetAllProducts
         {
             var products = await _unitOfWork.Products.GetAllAsync();
             if (!products.Any())
-                return [];
+                return new List<GetAllProductsResponse>();
             return _mapper.Map<List<GetAllProductsResponse>>(products);
         }
     }

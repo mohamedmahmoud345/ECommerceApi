@@ -1,8 +1,6 @@
-﻿
-
-namespace Application.Features.Category.Queries.GetAllCategories
+﻿namespace Application.Features.Categories.Commands.AddCategory
 {
-    public class GetAllCategoriesResponse
+    public class AddCategoryResponse
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
