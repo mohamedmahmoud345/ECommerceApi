@@ -2,13 +2,14 @@
 {
     public class Product
     {
+        private readonly List<Review> _reviews;
         public Product(string name, string description, string imageUrl, decimal price, int stockQuantity, Guid categoryId)
         {
-            if(string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description))
                 throw new ArgumentException(nameof(name));
-            if(price < 0)
+            if (price < 0)
                 throw new ArgumentOutOfRangeException(nameof(price));
-            if(stockQuantity < 0)
+            if (stockQuantity < 0)
                 throw new ArgumentOutOfRangeException(nameof(stockQuantity));
             Id = Guid.NewGuid();
             Name = name;
@@ -18,6 +19,7 @@
             StockQuantity = stockQuantity;
             CategoryId = categoryId;
             CreatedAt = DateTime.UtcNow;
+            _reviews = new List<Review>();
         }
 
         public Guid Id { get; private set; }
@@ -29,23 +31,41 @@
         public DateTime CreatedAt { get; private set; }
         public Guid CategoryId { get; private set; }
         public Category Category { get; private set; }
+        public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
 
+
+        public void AddReview(Review review)
+        {
+            if (review == null)
+                throw new ArgumentNullException(nameof(review));
+            if (review.ProductId != Id)
+                throw new InvalidOperationException("Review.ProductId does not match this Product.Id.");
+            _reviews.Add(review);
+        }
+        public bool RemoveReview(Guid reviewId)
+        {
+            var idx = _reviews.FindIndex(r => r.Id == reviewId);
+            if (idx < 0)
+                return false;
+            _reviews.RemoveAt(idx);
+            return true;
+        }
         public void UpdateStockQuantity(int quantity)
         {
-            if(quantity < 0)
+            if (quantity < 0)
                 throw new ArgumentOutOfRangeException(nameof(quantity));
-            StockQuantity  = quantity;
+            StockQuantity = quantity;
         }
         public bool IsInStock() => StockQuantity > 0;
         public void UpdatePrice(decimal newPrice)
         {
-            if(newPrice < 0)
+            if (newPrice < 0)
                 throw new ArgumentOutOfRangeException(nameof(newPrice));
             Price = newPrice;
         }
         public void Rename(string name)
         {
-            if(string.IsNullOrWhiteSpace(name))    
+            if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name is required", nameof(name));
             Name = name;
         }
@@ -57,7 +77,7 @@
         }
         public void ChangePhoto(string imageUrl)
         {
-            if(string.IsNullOrWhiteSpace(imageUrl))
+            if (string.IsNullOrWhiteSpace(imageUrl))
                 throw new ArgumentException(nameof(imageUrl));
             ImageUrl = imageUrl;
         }
