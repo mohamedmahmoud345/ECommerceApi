@@ -5,21 +5,21 @@ namespace Application.Features.Categories.Commands.DeleteCategory
 {
     public class DeleteCategoryHandler : IRequestHandler<DeleteCategoryCommand, bool>
     {
-        private readonly IUnitOfWork _unitOkwork;
+        private readonly IUnitOfWork _unitOfwork;
 
         public DeleteCategoryHandler(IUnitOfWork unitOkwork)
         {
-            _unitOkwork = unitOkwork;
+            _unitOfwork = unitOkwork;
         }
 
         public async Task<bool> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = await _unitOkwork.Categories.GetByIdAsync(request.Id);
+            var category = await _unitOfwork.Categories.GetByIdAsync(request.Id);
             if (category is null)
                 return false;
 
-            await _unitOkwork.Categories.DeleteAsync(request.Id);
-            await _unitOkwork.SaveChangesAsync();
+            await _unitOfwork.Categories.DeleteAsync(request.Id);
+            await _unitOfwork.SaveChangesAsync();
 
             return true;
         }

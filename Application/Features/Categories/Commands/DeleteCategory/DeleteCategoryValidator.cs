@@ -7,7 +7,7 @@ namespace Application.Features.Categories.Commands.DeleteCategory
         public DeleteCategoryValidator()
         {
             RuleFor(x => x.Id)
-                .NotEmpty().WithMessage("Id is required");
+                .NotEmpty().WithMessage("Id is required.");
         }
     }
 }

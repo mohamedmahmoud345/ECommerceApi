@@ -55,16 +55,16 @@ namespace Api.Controllers
         {
             if (id != categoryDto.Id)
                 return BadRequest("ID in URL does not match ID in body");
-            var categorCommand = new UpdateCategoryCommand()
+            var categoryCommand = new UpdateCategoryCommand()
             {
                 Id = categoryDto.Id,
                 Name = categoryDto.Name,
                 Description = categoryDto.Description
             };
 
-            var result = await _mediator.Send(categorCommand);
+            var result = await _mediator.Send(categoryCommand);
             if (!result)
-                return BadRequest(categorCommand);
+                return BadRequest("Category not Found");
 
             return NoContent();
         }
