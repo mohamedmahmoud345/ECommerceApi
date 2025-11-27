@@ -1,5 +1,7 @@
 ﻿using Api.Dto.Category;
 using Application.Features.Categories.Commands.AddCategory;
+using Application.Features.Categories.Commands.DeleteCategory;
+using Application.Features.Categories.Commands.UpdateCategory;
 using Application.Features.Categories.Queries.GetAllCategories;
 using Application.Features.Categories.Queries.GetCategoryById;
 using MediatR;
@@ -48,8 +50,34 @@ namespace Api.Controllers
 
             return CreatedAtAction(nameof(GetById), new { Id = category.Id }, category);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(Guid id, UpdateCategoryDto categoryDto)
+        {
+            if (id != categoryDto.Id)
+                return BadRequest("ID in URL does not match ID in body");
+            var categorCommand = new UpdateCategoryCommand()
+            {
+                Id = categoryDto.Id,
+                Name = categoryDto.Name,
+                Description = categoryDto.Description
+            };
 
+            var result = await _mediator.Send(categorCommand);
+            if (!result)
+                return BadRequest(categorCommand);
 
+            return NoContent();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteCategoryCommand(id));
+
+            if (!result)
+                return BadRequest();
+
+            return NoContent();
+        }
         private List<GetAllCategoriesResponse> pagination
             (List<GetAllCategoriesResponse> customers, int? pageNumber, int? pageSize)
         {

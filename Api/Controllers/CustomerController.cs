@@ -1,4 +1,4 @@
-﻿using Api.Dto.CustomerDto;
+﻿using Api.Dto.Customer;
 using Application.Features.Customers.Commands.AddCustomer;
 using Application.Features.Customers.Commands.DeleteCustomer;
 using Application.Features.Customers.Commands.UpdateCustomer;
