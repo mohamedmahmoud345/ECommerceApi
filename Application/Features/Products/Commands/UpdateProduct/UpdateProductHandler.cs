@@ -19,11 +19,14 @@ namespace Application.Features.Products.Commands.UpdateProduct
             var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
             if (product == null)
                 return false;
-            var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId.Value);
-            if (category == null)
-                return false;
 
-            product.ChangeCategory(request.CategoryId.Value);
+            if (request.CategoryId.HasValue)
+            {
+                var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId.Value);
+                if (category == null)
+                    return false;
+                product.ChangeCategory(request.CategoryId.Value);
+            }
 
             if (!string.IsNullOrWhiteSpace(request.Name))
                 product.Rename(request.Name);
