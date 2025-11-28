@@ -21,9 +21,4 @@
     <None Include="Features\Categories\Queries\GetCategoryById\GetCategoryByIdHandler.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Reviews\Commands\" />
-    <Folder Include="Features\Reviews\Queries\" />
-  </ItemGroup>
-
 </Project>
