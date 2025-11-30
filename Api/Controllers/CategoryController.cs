@@ -25,7 +25,7 @@ namespace Api.Controllers
         {
             var categories = await _mediator.Send(new GetAllCategoriesQuery());
 
-            return Ok(pagination(categories, pageNumber, pageSize));
+            return Ok(Pagination(categories, pageNumber, pageSize));
         }
 
         [HttpGet("{id}")]
@@ -78,7 +78,7 @@ namespace Api.Controllers
 
             return NoContent();
         }
-        private List<GetAllCategoriesResponse> pagination
+        private List<GetAllCategoriesResponse> Pagination
             (List<GetAllCategoriesResponse> customers, int? pageNumber, int? pageSize)
         {
             int number = 1;
@@ -87,9 +87,7 @@ namespace Api.Controllers
             int size = 5;
             if (pageSize != null)
                 size = pageSize.Value;
-
-            int count = customers.Count();
-
+            
             int pagNumbers = (number - 1) * size;
             var custs = customers.Skip(pagNumbers)
                 .Take(size)
