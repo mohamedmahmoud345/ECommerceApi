@@ -29,12 +29,17 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Review>?> GetByCustomerIdAsync(Guid customerId)
         {
-            return await _context.Reviews.AsNoTracking().Where(x => x.CustomerId == customerId).ToListAsync();
+            return await _context.Reviews
+                .Include(x => x.Customer)
+                .Include(x => x.Product)
+                .AsNoTracking().Where(x => x.CustomerId == customerId).ToListAsync();
         }
 
         public async Task<Review> GetByIdAsync(Guid id, bool asNoTracking = false)
         {
-            var query = _context.Reviews.AsNoTracking();
+            var query = _context.Reviews
+                .Include(x => x.Customer)
+                .Include(x => x.Product).AsNoTracking();
 
             if (asNoTracking)
                 query = query.AsNoTracking();
@@ -44,7 +49,10 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Review>?> GetByProductIdAsync(Guid productId)
         {
-            var reviews = await _context.Reviews.AsNoTracking().Where(x => x.ProductId == productId).ToListAsync();
+            var reviews = await _context.Reviews
+                .Include(x => x.Customer)
+                .Include(x => x.Product)
+                .AsNoTracking().Where(x => x.ProductId == productId).ToListAsync();
 
             return reviews;
         }
