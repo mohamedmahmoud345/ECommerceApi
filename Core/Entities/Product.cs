@@ -34,22 +34,6 @@
         public IReadOnlyCollection<Review> Reviews => _reviews.AsReadOnly();
 
 
-        public void AddReview(Review review)
-        {
-            if (review == null)
-                throw new ArgumentNullException(nameof(review));
-            if (review.ProductId != Id)
-                throw new InvalidOperationException("Review.ProductId does not match this Product.Id.");
-            _reviews.Add(review);
-        }
-        public bool RemoveReview(Guid reviewId)
-        {
-            var idx = _reviews.FindIndex(r => r.Id == reviewId);
-            if (idx < 0)
-                return false;
-            _reviews.RemoveAt(idx);
-            return true;
-        }
         public void UpdateStockQuantity(int quantity)
         {
             if (quantity < 0)

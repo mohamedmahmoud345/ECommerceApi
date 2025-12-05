@@ -28,8 +28,7 @@ namespace Application.Features.Reviews.Commands.AddReview
 
             var review = new Review(request.Comment, request.Rating, request.CustomerId, request.ProductId);
 
-            product.AddReview(review);
-
+          
             var reviewResponse = await _unitOfWork.Reviews.AddAsync(review);
             await _unitOfWork.SaveChangesAsync();
 
