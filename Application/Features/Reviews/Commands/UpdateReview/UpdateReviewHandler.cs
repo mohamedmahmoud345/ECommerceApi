@@ -24,9 +24,7 @@ namespace Application.Features.Reviews.Commands.UpdateReview
             if (request.Rating.HasValue)
                 review.UpdateRating(request.Rating.Value);
 
-            var product = await _unitOfWork.Products.GetByIdAsync(review.ProductId, true);
-            product.RemoveReview(review.Id);
-
+            await _unitOfWork.Reviews.Update(review);   
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
