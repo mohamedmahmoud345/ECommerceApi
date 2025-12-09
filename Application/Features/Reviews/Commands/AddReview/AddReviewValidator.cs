@@ -11,7 +11,7 @@ namespace Application.Features.Reviews.Commands.AddReview
                 .MaximumLength(250).WithMessage("Max Length is 250");
 
             RuleFor(x => x.Rating)
-                .InclusiveBetween(0, 5).WithMessage("Rating values between 0 to 5");
+                .InclusiveBetween(1, 5).WithMessage("Rating values between 1 to 5");
 
         }
     }
