@@ -43,9 +43,9 @@ namespace Api.Controllers
         }
 
         [HttpGet("customer/{id}")]
-        public async Task<IActionResult> GetByCustomerId(Guid id)
+        public async Task<IActionResult> GetByCustomerId(Guid id , [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var reviews = await _mediator.Send(new GetAllReviewsByCustomerIdQuery((id)));
+            var reviews = await _mediator.Send(new GetAllReviewsByCustomerIdQuery(id , page , pageSize));
 
             if (reviews == null)
                 return NotFound($"reviews with customer id {id} not found");
