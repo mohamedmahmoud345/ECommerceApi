@@ -1,11 +1,12 @@
-﻿using Application.IUnitOfWorks;
+﻿using Application.Common;
+using Application.IUnitOfWorks;
 using AutoMapper;
 using MediatR;
 
 namespace Application.Features.Reviews.Queries.GetAllReviewsByCustomerId
 {
     public class GetAllReviewsByCustomerIdHandler :
-        IRequestHandler<GetAllReviewsByCustomerIdQuery, List<GetAllReviewsByCustomerIdResponse>?>
+        IRequestHandler<GetAllReviewsByCustomerIdQuery, PageResult<GetAllReviewsByCustomerIdResponse>?>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -16,14 +17,26 @@ namespace Application.Features.Reviews.Queries.GetAllReviewsByCustomerId
             _mapper = mapper;
         }
 
-        public async Task<List<GetAllReviewsByCustomerIdResponse>?> Handle(GetAllReviewsByCustomerIdQuery request, CancellationToken cancellationToken)
+        public async Task<PageResult<GetAllReviewsByCustomerIdResponse>?> Handle(GetAllReviewsByCustomerIdQuery request, CancellationToken cancellationToken)
         {
             var reviews = await _unitOfWork.Reviews.GetByCustomerIdAsync(request.CustomerId);
 
             if (reviews == null)
-                return new List<GetAllReviewsByCustomerIdResponse>();
+                return new PageResult<GetAllReviewsByCustomerIdResponse>();
 
-            return _mapper.Map<List<GetAllReviewsByCustomerIdResponse>>(reviews);
+            var data = reviews.AsQueryable();
+
+            var pagedResult = await data.ToPagedResultAsync(request.Page, request.PageSize);
+
+            var mappedData = _mapper.Map<IEnumerable<GetAllReviewsByCustomerIdResponse>>(pagedResult.Data);
+
+            return new PageResult<GetAllReviewsByCustomerIdResponse>()
+            {
+                Count = pagedResult.Count,
+                PageSize = pagedResult.PageSize,
+                Page = pagedResult.Page,
+                Data = mappedData
+            };
         }
     }
 }

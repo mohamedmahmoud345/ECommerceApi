@@ -31,9 +31,9 @@ namespace Application.Features.Reviews.Queries.GetAllReviewsByProductId
 
             return new PageResult<GetAllReviewsByProductIdResponse>()
             {
-                Page = pagedResult.Page,
-                PageSize = pagedResult.PageSize,
                 Count = pagedResult.Count,
+                PageSize = pagedResult.PageSize,
+                Page = pagedResult.Page,
                 Data = mappedData
             };
 
