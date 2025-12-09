@@ -23,10 +23,14 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? pageNumber, [FromQuery] int? pageSize)
+        public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var products = await _mediator.Send(new GetAllProductsQuery());
-            return Ok(pagination(products, pageNumber, pageSize));
+            var products = await _mediator.Send(new GetAllProductsQuery(page, pageSize))    ;
+
+            if (products == null)
+                return BadRequest();
+            
+            return Ok(products);
 
         }
 
@@ -40,13 +44,13 @@ namespace Api.Controllers
         }
 
         [HttpGet("category/{id:guid}")]
-        public async Task<IActionResult> GetByCategoryId(Guid id, int? pageNumber, int? pageSize)
+        public async Task<IActionResult> GetByCategoryId(Guid id,[FromQuery] int page = 1,[FromQuery] int pageSize = 10)
         {
-            var products = await _mediator.Send(new GetProductsByCategoryIdQuery(id));
+            var products = await _mediator.Send(new GetProductsByCategoryIdQuery(id , page , pageSize));
             if (products == null)
                 return NotFound($"Category with id {id} not found");
 
-            return Ok(pagination(products, pageNumber, pageSize));
+            return Ok(products);
         }
 
         [HttpPost]
@@ -122,26 +126,5 @@ namespace Api.Controllers
             }
             return $"/{folder}/{fileName}";
         }
-
-        private List<T> pagination<T>
-            (List<T> products, int? pageNumber, int? pageSize) where T : class
-        {
-            int number = 1;
-            if (pageNumber != null)
-                number = pageNumber.Value;
-            int size = 5;
-            if (pageSize != null)
-                size = pageSize.Value;
-
-            int count = products.Count();
-
-            int pagNumbers = (number - 1) * size;
-            var custs = products.Skip(pagNumbers)
-                .Take(size)
-                .ToList();
-
-            return custs;
-        }
-
     }
 }

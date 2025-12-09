@@ -1,11 +1,12 @@
 ﻿
+using Application.Common;
 using Application.IUnitOfWorks;
 using AutoMapper;
 using MediatR;
 
 namespace Application.Features.Products.Queries.GetProductsByCategoryId
 {
-    public class GetProductsByCategoryIdHandler : IRequestHandler<GetProductsByCategoryIdQuery, List<GetProductsByCategoryIdResponse>>
+    public class GetProductsByCategoryIdHandler : IRequestHandler<GetProductsByCategoryIdQuery, PageResult<GetProductsByCategoryIdResponse?>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -16,15 +17,29 @@ namespace Application.Features.Products.Queries.GetProductsByCategoryId
             _mapper = mapper;
         }
 
-        public async Task<List<GetProductsByCategoryIdResponse?>> Handle(GetProductsByCategoryIdQuery request, CancellationToken cancellationToken)
+        public async Task<PageResult<GetProductsByCategoryIdResponse?>> Handle(GetProductsByCategoryIdQuery request, CancellationToken cancellationToken)
         {
-            var isIdValid = await _unitOfWork.Categories.GetByIdAsync(request.Id);
-            if (isIdValid == null)
+            var isExist = await _unitOfWork.Categories.GetByIdAsync(request.Id);
+            if (isExist == null)
                 return null;
 
             var products = await _unitOfWork.Products.GetByCategoryIdAsync(request.Id);
 
-            return _mapper.Map<List<GetProductsByCategoryIdResponse>>(products);
+            if (products == null || !products.Any())
+                return new PageResult<GetProductsByCategoryIdResponse?>();
+
+            var data = products.AsQueryable();
+
+            var pagedResult = await data.ToPagedResultAsync(request.Page, request.PageSize);
+            var mappedResult = _mapper.Map<IEnumerable<GetProductsByCategoryIdResponse>>(pagedResult.Data);
+
+            return new PageResult<GetProductsByCategoryIdResponse?>()
+            {
+                Count = pagedResult.Count,
+                PageSize = pagedResult.PageSize,
+                Page = pagedResult.Page,
+                Data = mappedResult
+            };
         }
     }
 }

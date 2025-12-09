@@ -21,11 +21,11 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? pageNumber, [FromQuery] int? pageSize)
+        public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var categories = await _mediator.Send(new GetAllCategoriesQuery());
-
-            return Ok(Pagination(categories, pageNumber, pageSize));
+            var categories = await _mediator.Send(new GetAllCategoriesQuery(page , pageSize));
+            
+            return Ok(categories);
         }
 
         [HttpGet("{id}")]
@@ -78,23 +78,5 @@ namespace Api.Controllers
 
             return NoContent();
         }
-        private List<GetAllCategoriesResponse> Pagination
-            (List<GetAllCategoriesResponse> customers, int? pageNumber, int? pageSize)
-        {
-            int number = 1;
-            if (pageNumber != null)
-                number = pageNumber.Value;
-            int size = 5;
-            if (pageSize != null)
-                size = pageSize.Value;
-            
-            int pagNumbers = (number - 1) * size;
-            var custs = customers.Skip(pagNumbers)
-                .Take(size)
-                .ToList();
-
-            return custs;
-        }
-
     }
 }

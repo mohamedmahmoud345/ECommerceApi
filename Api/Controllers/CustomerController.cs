@@ -21,10 +21,10 @@ namespace Api.Controllers
             _mediator = mediator;
         }
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int? pageNumber, [FromQuery] int? pageSize)
+        public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var customers = await _mediator.Send(new GetAllCustomersQuery());
-            return Ok(pagination(customers, pageNumber, pageSize));
+            var customers = await _mediator.Send(new GetAllCustomersQuery(page , pageSize));
+            return Ok(customers);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
@@ -96,26 +96,6 @@ namespace Api.Controllers
             if (!success)
                 return NotFound($"Customer with ID {customerDto.Id} not found");
             return NoContent();
-        }
-
-        private List<GetAllCustomersResponse> pagination
-            (List<GetAllCustomersResponse> customers, int? pageNumber, int? pageSize)
-        {
-            int number = 1;
-            if (pageNumber != null)
-                number = pageNumber.Value;
-            int size = 5;
-            if (pageSize != null)
-                size = pageSize.Value;
-
-            int count = customers.Count();
-
-            int pagNumbers = (number - 1) * size;
-            var custs = customers.Skip(pagNumbers)
-                .Take(size)
-                .ToList();
-
-            return custs;
         }
     }
 }
