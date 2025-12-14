@@ -15,9 +15,10 @@ namespace Infrastructure.Configurations
                 .HasForeignKey(x => x.CartId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(x => x.Customer)
-                .WithMany(x => x.Cart)
-                .HasForeignKey(x => x.CustomerId);
+            builder.HasOne(cart => cart.Customer)
+                .WithOne(c => c.Cart)
+                .HasForeignKey<Cart>(cart => cart.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
