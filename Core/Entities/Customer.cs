@@ -22,7 +22,7 @@
         public string Phone { get; private set; }
         public string Address { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public ICollection<Cart> Cart { get; private set; } = new List<Cart>();
+        public Cart? Cart { get; private set; }
 
         public void Rename(string name) 
         {
