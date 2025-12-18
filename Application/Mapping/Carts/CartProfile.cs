@@ -1,4 +1,5 @@
 ﻿using Application.Features.Cart.Commands.AddItemToCart;
+using Application.Features.Cart.Common;
 using AutoMapper;
 using Core.Entities;
 
@@ -8,7 +9,15 @@ namespace Application.Mapping.Carts
     {
         public CartProfile()
         {
-            CreateMap<Cart, AddItemToCartResponse>();
+            CreateMap<Cart, AddItemToCartResponse>()
+                .ForMember(x => x.TotalItems, x => x.MapFrom(x => x.Quantity))
+                .ForMember(x => x._items, x => x.MapFrom(x => x.Items));
+
+            CreateMap<CartItem, CartItemResponse>()
+                .ForMember(x => x.ProductName, x => x.MapFrom(x => x.Product.Name))
+                .ForMember(x => x.ProductImageUrl, x => x.MapFrom(x => x.Product.ImageUrl))
+                .ForMember(x => x.ProductPrice, x => x.MapFrom(x => x.Product.Price))
+                .ForMember(x => x.SubTotal, x => x.MapFrom(x => x.Product.Price * x.Quantity));
         }
     }
 }
