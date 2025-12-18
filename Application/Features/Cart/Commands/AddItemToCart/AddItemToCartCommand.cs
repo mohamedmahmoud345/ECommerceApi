@@ -1,10 +1,11 @@
 ﻿using MediatR;
 
-namespace Application.Features.Cart.Commands.AddItemToCart;
-
-public class AddItemToCartCommand : IRequest<AddItemToCartResponse>
+namespace Application.Features.Cart.Commands.AddItemToCart
 {
-    public Guid CustomerId { get; set; }
-    public Guid ProductId { get; set; }
-    public int Quantity { get; set; }
+    public class AddItemToCartCommand : IRequest<AddItemToCartResponse>
+    {
+        public Guid CustomerId { get; set; }
+        public Guid ProductId { get; set; }
+        public int Quantity { get; set; }
+    }
 }
