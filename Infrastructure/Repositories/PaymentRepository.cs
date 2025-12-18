@@ -37,7 +37,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Payment> GetByIdAsync(Guid id, bool asNoTracking = false)
         {
-            var query = _context.Payments.AsNoTracking();
+            var query = _context.Payments.AsQueryable();
 
             if (asNoTracking)
                 query = query.AsNoTracking();

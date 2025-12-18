@@ -39,7 +39,7 @@ namespace Infrastructure.Repositories
         {
             var query = _context.Reviews
                 .Include(x => x.Customer)
-                .Include(x => x.Product).AsNoTracking();
+                .Include(x => x.Product).AsQueryable();
 
             if (asNoTracking)
                 query = query.AsNoTracking();

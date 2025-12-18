@@ -39,7 +39,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Product> GetByIdAsync(Guid id, bool asNoTracking = false)
         {
-            var query = _context.Products.AsNoTracking();
+            var query = _context.Products.AsQueryable();
 
             if (asNoTracking)
                 query = query.AsNoTracking();
