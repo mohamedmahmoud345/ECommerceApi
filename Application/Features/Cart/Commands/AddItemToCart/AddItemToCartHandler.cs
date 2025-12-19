@@ -24,6 +24,9 @@ namespace Application.Features.Cart.Commands.AddItemToCart
                 await _unitOfWork.Carts.AddAsync(cart);
             }
 
+            if (cart.Items.Count >= 100)
+                throw new InvalidOperationException(nameof(cart.Items.Count));
+
             var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
             if (product == null)
                 return null;
