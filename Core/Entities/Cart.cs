@@ -19,21 +19,22 @@
         }
         public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
 
-        public void AddItem(Product product , int quantity)
+        public void AddItem(Product product, int quantity)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
-            if(quantity <= 0)
+            if (quantity <= 0)
                 throw new ArgumentOutOfRangeException(nameof(quantity));
-
+            if (_items.Count >= 100)
+                throw new InvalidOperationException(nameof(_items.Count));
             var item = _items.FirstOrDefault(x => x.Product.Id == product.Id);
-            if(item != null)
+            if (item != null)
             {
                 item.UpdateQuantity(item.Quantity + quantity);
             }
             else
-            {                
-                _items.Add(new CartItem(Id,product, quantity));
+            {
+                _items.Add(new CartItem(Id, product, quantity));
             }
         }
         public void RemoveItem(Product product)
