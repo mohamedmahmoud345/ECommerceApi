@@ -24,10 +24,15 @@
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
             if (quantity <= 0)
-                throw new ArgumentOutOfRangeException(nameof(quantity));
+                throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be positive");
             if (_items.Count >= 100)
-                throw new InvalidOperationException(nameof(_items.Count));
+                throw new InvalidOperationException("Your cart has reached the maximum limit of 100 items");
             var item = _items.FirstOrDefault(x => x.Product.Id == product.Id);
+
+            var requestedQuantity = item != null ? item.Quantity + quantity : quantity;
+            if (requestedQuantity > product.StockQuantity)
+                throw new InvalidOperationException($"Cannot add {quantity} items. Only {product.StockQuantity} available in stock.");
+
             if (item != null)
             {
                 item.UpdateQuantity(item.Quantity + quantity);
