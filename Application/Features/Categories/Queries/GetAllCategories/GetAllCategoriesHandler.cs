@@ -24,10 +24,10 @@ namespace Application.Features.Categories.Queries.GetAllCategories
                 return new PageResult<GetAllCategoriesResponse>();
 
             var data = categories.AsQueryable();
-            
+
             var pagedReuslt = await data.ToPagedResultAsync(request.Page, request.PageSize);
-            
-            var mappedReuslt = _mapper.Map<IEnumerable<GetAllCategoriesResponse>>(pagedReuslt);
+
+            var mappedReuslt = _mapper.Map<IEnumerable<GetAllCategoriesResponse>>(pagedReuslt.Data);
 
             return new PageResult<GetAllCategoriesResponse>()
             {
