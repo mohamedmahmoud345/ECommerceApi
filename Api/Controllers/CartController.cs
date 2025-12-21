@@ -1,5 +1,6 @@
 ﻿using Api.Dto.Cart;
 using Application.Features.Cart.Commands.AddItemToCart;
+using Application.Features.Cart.Queries.GetAllCartItemsByCustomerId;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,12 +17,18 @@ namespace Api.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByCustomerId(Guid id)
+        {
+            var items = await _mediator.Send(new GetAllCartItemsByCustomerIdQuery(id));
+            if (items == null)
+                return BadRequest();
+
+            return Ok(items);
+        }
         [HttpPost]
         public async Task<IActionResult> Add(AddItemDto itemDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var command = new AddItemToCartCommand()
             {
                 CustomerId = itemDto.CustomerId,
