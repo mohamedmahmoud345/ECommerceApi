@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251106183125_initial")]
+    [Migration("20251219180224_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -42,7 +42,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
 
                     b.ToTable("Carts");
                 });
@@ -71,7 +72,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItem");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("Core.Entities.Category", b =>
@@ -283,8 +284,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.Cart", b =>
                 {
                     b.HasOne("Core.Entities.Customer", "Customer")
-                        .WithMany("Cart")
-                        .HasForeignKey("CustomerId")
+                        .WithOne("Cart")
+                        .HasForeignKey("Core.Entities.Cart", "CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -371,7 +372,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -394,6 +395,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Core.Entities.Order", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Core.Entities.Product", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }
