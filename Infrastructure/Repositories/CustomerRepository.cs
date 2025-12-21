@@ -37,7 +37,9 @@ namespace Infrastructure.Repositories
 
         public async Task<Customer> GetByIdAsync(Guid id, bool asNoTracking = false)
         {
-            var query = _context.Customers.AsQueryable();
+            var query = _context.Customers
+                .Include(x => x.Cart)
+                .AsQueryable();
 
             if (asNoTracking)
                 query = query.AsNoTracking();
