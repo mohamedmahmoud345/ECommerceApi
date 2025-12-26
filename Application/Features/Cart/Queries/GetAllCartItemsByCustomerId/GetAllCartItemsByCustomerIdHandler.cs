@@ -17,15 +17,15 @@ namespace Application.Features.Cart.Queries.GetAllCartItemsByCustomerId
 
         public async Task<List<GetAllCartItemsByCustomerIdResponse>?> Handle(GetAllCartItemsByCustomerIdQuery request, CancellationToken cancellationToken)
         {
-            var customer = await _unitOfWork.Customers.GetByIdAsync(request.CustomerId, true);
+            var customer = await _unitOfWork.Customers.GetByIdAsync(request.CustomerId);
             if (customer == null)
                 return null;
 
-            var items = customer.Cart?.Items;
-            if (items == null)
+            var items = await _unitOfWork.Carts.GetByCustomerIdAsync(request.CustomerId);
+            if (!items.Items.Any())
                 return new List<GetAllCartItemsByCustomerIdResponse>();
 
-            var mapper = _mapper.Map<List<GetAllCartItemsByCustomerIdResponse>>(items);
+            var mapper = _mapper.Map<List<GetAllCartItemsByCustomerIdResponse>>(items.Items);
 
 
             return mapper;
