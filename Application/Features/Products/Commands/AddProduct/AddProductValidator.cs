@@ -14,8 +14,12 @@ namespace Application.Features.Products.Commands.AddProduct
                 .NotEmpty().WithMessage("Description is required")
                 .MaximumLength(200).WithMessage("Description must not exceed 200 characters");
 
-            RuleFor(x => x.ImageUrl)
-                .NotEmpty().WithMessage("ImageUrl is required");
+            RuleFor(x => x.ImageName)
+                .Must(BeValidImageExtension).WithMessage("Only .jpg or .png allowed");
+
+            RuleFor(x => x.ImageStream)
+                .Must(stream => stream.Length <= 5 * 1024 * 1024)
+                .WithMessage("File size must not exceed 5MB");
 
             RuleFor(x => x.Price)
                 .NotEmpty().WithMessage("Price is required")
@@ -27,6 +31,13 @@ namespace Application.Features.Products.Commands.AddProduct
 
             RuleFor(x => x.CategoryId)
                 .NotEmpty().WithMessage("Category id is required");
+        }
+
+        private bool BeValidImageExtension(string fileName)
+        {
+            var extension = Path.GetExtension(fileName).ToLower();
+
+            return extension == ".jpg" || extension == ".png";
         }
     }
 }
