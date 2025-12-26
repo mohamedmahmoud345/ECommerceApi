@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces.IRepositories;
+using Application.Interfaces.Services;
 using Application.IUnitOfWorks;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Infrastructure.UnitOfWorks;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +19,7 @@ namespace Infrastructure.Dependecies
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IFileStorageService, LocalFileStorageService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
