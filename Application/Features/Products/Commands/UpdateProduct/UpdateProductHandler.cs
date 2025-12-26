@@ -36,8 +36,6 @@ namespace Application.Features.Products.Commands.UpdateProduct
                 product.UpdateStockQuantity(request.StockQuantity.Value);
             if (request.Price != null && request.Price.Value > 0)
                 product.UpdatePrice(request.Price.Value);
-            if (!string.IsNullOrWhiteSpace(request.ImageUrl))
-                product.ChangePhoto(request.ImageUrl);
 
             await _unitOfWork.Products.Update(product);
             await _unitOfWork.SaveChangesAsync();
