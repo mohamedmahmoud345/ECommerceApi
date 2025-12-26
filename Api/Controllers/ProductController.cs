@@ -2,6 +2,7 @@
 using Application.Features.Products.Commands.AddProduct;
 using Application.Features.Products.Commands.DeleteProduct;
 using Application.Features.Products.Commands.UpdateProduct;
+using Application.Features.Products.Commands.UpdateProductImage;
 using Application.Features.Products.Queries.GetAllProducts;
 using Application.Features.Products.Queries.GetProductById;
 using Application.Features.Products.Queries.GetProductsByCategoryId;
@@ -25,11 +26,11 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var products = await _mediator.Send(new GetAllProductsQuery(page, pageSize))    ;
+            var products = await _mediator.Send(new GetAllProductsQuery(page, pageSize));
 
             if (products == null)
                 return BadRequest();
-            
+
             return Ok(products);
 
         }
@@ -44,9 +45,9 @@ namespace Api.Controllers
         }
 
         [HttpGet("category/{id:guid}")]
-        public async Task<IActionResult> GetByCategoryId(Guid id,[FromQuery] int page = 1,[FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetByCategoryId(Guid id, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var products = await _mediator.Send(new GetProductsByCategoryIdQuery(id , page , pageSize));
+            var products = await _mediator.Send(new GetProductsByCategoryIdQuery(id, page, pageSize));
             if (products == null)
                 return NotFound($"Category with id {id} not found");
 
@@ -54,10 +55,8 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddProductDto productDto)
+        public async Task<IActionResult> Add([FromForm] AddProductDto productDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
             var command = new AddProductCommand()
             {
                 Name = productDto.Name,
@@ -65,7 +64,8 @@ namespace Api.Controllers
                 Description = productDto.Description,
                 Price = productDto.Price,
                 StockQuantity = productDto.StockQuantity,
-                ImageUrl = await GetPath(productDto.ImageUrl, "Products")
+                ImageName = productDto.ImageUrl.FileName,
+                ImageStream = productDto.ImageUrl.OpenReadStream()
             };
             var success = await _mediator.Send(command);
             if (success == null)
@@ -90,7 +90,6 @@ namespace Api.Controllers
                 CategoryId = productDto.CategoryId,
                 Price = productDto.Price,
                 StockQuantity = productDto.StockQuantity,
-                ImageUrl = await GetPath(productDto.ImageUrl, "Products")
             };
 
             var success = await _mediator.Send(productCommand);
@@ -99,6 +98,23 @@ namespace Api.Controllers
 
             return NoContent();
         }
+        [HttpPut("image/{id}")]
+        public async Task<IActionResult> EditImage(Guid id, IFormFile image)
+        {
+            var command = new UpdateProductImageCommand()
+            {
+                Id = id,
+                ImageName = image.FileName,
+                ImageStream = image.OpenReadStream()
+            };
+
+            var success = await _mediator.Send(command);
+            if (!success)
+                return BadRequest();
+
+            return NoContent();
+        }
+
         [HttpDelete("{Id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -108,23 +124,6 @@ namespace Api.Controllers
                 return BadRequest($"customer with id {id} not found");
 
             return NoContent();
-        }
-        private async Task<string?> GetPath(IFormFile? file, string? folder)
-        {
-            if (file == null || folder == null)
-                return null;
-            var uploads = Path.Combine(_environment.WebRootPath, folder);
-            if (!Directory.Exists(uploads))
-                Directory.CreateDirectory(uploads);
-
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var filepath = Path.Combine(uploads, fileName);
-
-            using (var stream = new FileStream(filepath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-            return $"/{folder}/{fileName}";
         }
     }
 }
