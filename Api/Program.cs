@@ -1,4 +1,6 @@
+using Api.Services;
 using Application;
+using Application.Interfaces.Services;
 using Application.Middlewares;
 using Infrastructure.Data;
 using Infrastructure.Dependecies;
@@ -21,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services
     .AddRepositoriesDependencies()
     .AddApplicationDependencies();
+builder.Services.AddScoped<IFilePathProvider, FilePathProvider>();
 #endregion
 
 var app = builder.Build();
