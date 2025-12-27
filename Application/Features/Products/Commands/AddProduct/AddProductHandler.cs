@@ -33,7 +33,6 @@ namespace Application.Features.Products.Commands.AddProduct
                         "Products"
                     );
 
-                request.ImageStream.Dispose();
 
                 var product = new Product(request.Name, request.Description, imagePath, request.Price, request.StockQuantity, request.CategoryId);
 

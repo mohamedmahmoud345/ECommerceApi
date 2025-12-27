@@ -57,6 +57,9 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] AddProductDto productDto)
         {
+
+            using var stream = productDto.ImageUrl.OpenReadStream();
+
             var command = new AddProductCommand()
             {
                 Name = productDto.Name,
@@ -65,7 +68,7 @@ namespace Api.Controllers
                 Price = productDto.Price,
                 StockQuantity = productDto.StockQuantity,
                 ImageName = productDto.ImageUrl.FileName,
-                ImageStream = productDto.ImageUrl.OpenReadStream()
+                ImageStream = stream
             };
             var success = await _mediator.Send(command);
             if (success == null)
