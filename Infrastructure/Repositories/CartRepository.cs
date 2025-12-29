@@ -30,6 +30,7 @@ namespace Infrastructure.Repositories
         {
             return await _context.Carts
                 .Include(x => x.Items)
+                .ThenInclude(x => x.Product)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.CustomerId == customerId);
         }
