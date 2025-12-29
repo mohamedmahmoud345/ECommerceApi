@@ -5,7 +5,7 @@ using MediatR;
 namespace Application.Features.Cart.Queries.GetAllCartItemsByCustomerId
 {
     public class GetAllCartItemsByCustomerIdHandler
-        : IRequestHandler<GetAllCartItemsByCustomerIdQuery, List<GetAllCartItemsByCustomerIdResponse>?>
+        : IRequestHandler<GetAllCartItemsByCustomerIdQuery, GetAllCartItemsByCustomerIdResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -15,17 +15,17 @@ namespace Application.Features.Cart.Queries.GetAllCartItemsByCustomerId
             _mapper = mapper;
         }
 
-        public async Task<List<GetAllCartItemsByCustomerIdResponse>?> Handle(GetAllCartItemsByCustomerIdQuery request, CancellationToken cancellationToken)
+        public async Task<GetAllCartItemsByCustomerIdResponse?> Handle(GetAllCartItemsByCustomerIdQuery request, CancellationToken cancellationToken)
         {
             var customer = await _unitOfWork.Customers.GetByIdAsync(request.CustomerId);
             if (customer == null)
                 return null;
 
             var items = await _unitOfWork.Carts.GetByCustomerIdAsync(request.CustomerId);
-            if (!items.Items.Any())
-                return new List<GetAllCartItemsByCustomerIdResponse>();
+            if (!await _unitOfWork.Carts.HasActiveCartAsync(customer.Id) || !items.Items.Any())
+                return new GetAllCartItemsByCustomerIdResponse();
 
-            var mapper = _mapper.Map<List<GetAllCartItemsByCustomerIdResponse>>(items.Items);
+            var mapper = _mapper.Map<GetAllCartItemsByCustomerIdResponse>(items);
 
 
             return mapper;
