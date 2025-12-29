@@ -12,11 +12,11 @@ namespace Application.Mapping.Carts
         {
             CreateMap<Cart, AddItemToCartResponse>()
                 .ForMember(x => x.TotalItems, x => x.MapFrom(x => x.Quantity))
-                .ForMember(x => x._items, x => x.MapFrom(x => x.Items));
+                .ForMember(x => x.Items, x => x.MapFrom(x => x.Items));
 
             CreateMap<Cart, GetAllCartItemsByCustomerIdResponse>()
                 .ForMember(x => x.TotalItems, x => x.MapFrom(x => x.Quantity))
-                .ForMember(x => x._items, x => x.MapFrom(x => x.Items));
+                .ForMember(x => x.Items, x => x.MapFrom(x => x.Items));
 
             CreateMap<CartItem, CartItemResponse>()
                 .ForMember(x => x.ProductName, x => x.MapFrom(x => x.Product.Name))
