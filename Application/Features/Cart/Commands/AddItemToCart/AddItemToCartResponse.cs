@@ -11,6 +11,6 @@ namespace Application.Features.Cart.Commands.AddItemToCart
 
         public int TotalItems { get; set; }
         public int TotalAmount { get; set; }
-        public List<CartItemResponse> _items = new();
+        public List<CartItemResponse> Items { get; set; } = new();
     }
 }
