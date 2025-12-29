@@ -2,7 +2,7 @@
 
 namespace Application.Features.Cart.Queries.GetAllCartItemsByCustomerId
 {
-    public class GetAllCartItemsByCustomerIdQuery : IRequest<List<GetAllCartItemsByCustomerIdResponse>>
+    public class GetAllCartItemsByCustomerIdQuery : IRequest<GetAllCartItemsByCustomerIdResponse>
     {
         public Guid CustomerId { get; set; }
         public GetAllCartItemsByCustomerIdQuery(Guid customerId)
