@@ -19,17 +19,21 @@ namespace Application.Features.Cart.Commands.AddItemToCart
         {
             var cart = await _unitOfWork.Carts.GetByCustomerIdAsync(request.CustomerId);
 
-            var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId, asNoTracking: true);
+            var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
             if (product == null)
                 return null;
 
             if (cart == null)
             {
                 cart = new Core.Entities.Cart(request.CustomerId);
-                await _unitOfWork.Carts.AddAsync(cart);
+                //await _unitOfWork.Carts.AddAsync(cart);
             }
 
             cart.AddItem(product, request.Quantity);
+            if (cart.Id != Guid.Empty) // If it's an existing cart
+            {
+                await _unitOfWork.Carts.Update(cart);
+            }
             await _unitOfWork.SaveChangesAsync();
 
             var cartResult = _mapper.Map<AddItemToCartResponse>(cart);

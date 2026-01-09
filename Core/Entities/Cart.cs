@@ -16,8 +16,9 @@
             Date = DateTime.UtcNow;
             CustomerId = customerId;
             CreatedAt = DateTime.UtcNow;
+            Items = _items;
         }
-        public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
+        public ICollection<CartItem> Items { get; private set; }
 
         public void AddItem(Product product, int quantity)
         {

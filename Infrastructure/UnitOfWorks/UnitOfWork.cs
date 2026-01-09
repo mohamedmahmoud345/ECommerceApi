@@ -1,6 +1,7 @@
 ﻿
 using Application.Interfaces.IRepositories;
 using Application.IUnitOfWorks;
+using Core.Entities;
 using Infrastructure.Data;
 
 namespace Infrastructure.UnitOfWorks
@@ -23,19 +24,19 @@ namespace Infrastructure.UnitOfWorks
 
         public IProductRepository Products { get; }
 
-        public IOrderRepository Orders {get;}
+        public IOrderRepository Orders { get; }
 
-        public ICartRepository Carts {get;}
+        public ICartRepository Carts { get; }
 
-        public ICustomerRepository Customers {get;}
+        public ICustomerRepository Customers { get; }
 
-        public ICategoryRepository Categories {get;}
+        public ICategoryRepository Categories { get; }
 
-        public IReviewRepository Reviews {get;}
+        public IReviewRepository Reviews { get; }
 
-        public IPaymentRepository Payments {get;}
+        public IPaymentRepository Payments { get; }
 
-        
+
 
         public void Dispose()
         {
@@ -44,6 +45,15 @@ namespace Infrastructure.UnitOfWorks
 
         public async Task<int> SaveChangesAsync()
         {
+            var cartItemStates = _context.ChangeTracker
+                    .Entries<CartItem>()
+                    .Select(e => new
+                    {
+                        ProductId = e.Entity.ProductId,
+                        State = e.State,
+                        IsNew = e.Entity.Id == Guid.NewGuid() // This won't work, but shows the ID
+                    })
+                    .ToList();
             return await _context.SaveChangesAsync();
         }
     }

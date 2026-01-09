@@ -19,6 +19,9 @@ namespace Infrastructure.Configurations
                 .WithOne(c => c.Cart)
                 .HasForeignKey<Cart>(cart => cart.CustomerId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Metadata.FindNavigation(nameof(Cart.Items))
+        .SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }
