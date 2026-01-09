@@ -21,4 +21,8 @@
     <None Include="Features\Categories\Queries\GetCategoryById\GetCategoryByIdHandler.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Cart\Commands\DeleteItemFromCart\" />
+  </ItemGroup>
+
 </Project>

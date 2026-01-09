@@ -18,21 +18,21 @@ namespace Application.Features.Cart.Commands.AddItemToCart
         public async Task<AddItemToCartResponse?> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
         {
             var cart = await _unitOfWork.Carts.GetByCustomerIdAsync(request.CustomerId);
+
+            var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId, asNoTracking: true);
+            if (product == null)
+                return null;
+
             if (cart == null)
             {
                 cart = new Core.Entities.Cart(request.CustomerId);
                 await _unitOfWork.Carts.AddAsync(cart);
             }
 
-            var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
-            if (product == null)
-                return null;
-
             cart.AddItem(product, request.Quantity);
             await _unitOfWork.SaveChangesAsync();
 
             var cartResult = _mapper.Map<AddItemToCartResponse>(cart);
-
 
             return cartResult;
         }

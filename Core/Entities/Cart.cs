@@ -27,7 +27,7 @@
                 throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity must be positive");
             if (_items.Count >= 100)
                 throw new InvalidOperationException("Your cart has reached the maximum limit of 100 items");
-            var item = _items.FirstOrDefault(x => x.Product.Id == product.Id);
+            var item = _items.FirstOrDefault(x => x.ProductId == product.Id);
 
             var requestedQuantity = item != null ? item.Quantity + quantity : quantity;
             if (requestedQuantity > product.StockQuantity)
@@ -42,11 +42,9 @@
                 _items.Add(new CartItem(Id, product, quantity));
             }
         }
-        public void RemoveItem(Product product)
+        public void RemoveItem(Guid itemId)
         {
-            if (product == null)
-                throw new ArgumentNullException(nameof(product));
-            var item = _items.FirstOrDefault(x => x.Product.Id == product.Id);
+            var item = _items.FirstOrDefault(x => x.Id == itemId);
             if (item != null)
                 _items.Remove(item);
         }

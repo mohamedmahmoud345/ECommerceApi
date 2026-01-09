@@ -5,7 +5,7 @@ using MediatR;
 namespace Application.Features.Cart.Queries.GetAllCartItemsByCustomerId
 {
     public class GetAllCartItemsByCustomerIdHandler
-        : IRequestHandler<GetAllCartItemsByCustomerIdQuery, GetAllCartItemsByCustomerIdResponse>
+        : IRequestHandler<GetAllCartItemsByCustomerIdQuery, GetAllCartItemsByCustomerIdResponse?>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -21,14 +21,14 @@ namespace Application.Features.Cart.Queries.GetAllCartItemsByCustomerId
             if (customer == null)
                 return null;
 
-            var items = await _unitOfWork.Carts.GetByCustomerIdAsync(request.CustomerId);
-            if (!await _unitOfWork.Carts.HasActiveCartAsync(customer.Id) || !items.Items.Any())
+            var cart = await _unitOfWork.Carts.GetByCustomerIdAsync(request.CustomerId);
+            if (!await _unitOfWork.Carts.HasActiveCartAsync(customer.Id) || !cart.Items.Any())
                 return new GetAllCartItemsByCustomerIdResponse();
 
-            var mapper = _mapper.Map<GetAllCartItemsByCustomerIdResponse>(items);
+            var result = _mapper.Map<GetAllCartItemsByCustomerIdResponse>(cart);
 
 
-            return mapper;
+            return result;
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Api.Dto.Cart;
+﻿using System.Diagnostics;
+using Api.Dto.Cart;
 using Application.Features.Cart.Commands.AddItemToCart;
+using Application.Features.Cart.Commands.DeleteItemFromCart;
 using Application.Features.Cart.Queries.GetAllCartItemsByCustomerId;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +43,19 @@ namespace Api.Controllers
                 return BadRequest();
 
             return Ok(result);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(DeleteItemDto deleteItem)
+        {
+            var command = new DeleteItemFromCartCommand(
+                deleteItem.CustomerId,
+                deleteItem.ItemId
+            );
+            var success = await _mediator.Send(command);
+            if (!success)
+                return BadRequest();
+
+            return NoContent();
         }
     }
 }
