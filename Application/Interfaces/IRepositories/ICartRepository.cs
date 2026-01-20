@@ -5,7 +5,7 @@ namespace Application.Interfaces.IRepositories
 {
     public interface ICartRepository
     {
-        Task<Cart?> GetByCustomerIdAsync(Guid customerId);
+        Task<Cart?> GetByCustomerIdAsync(Guid customerId, bool asNoTracking = false);
         Task<bool> HasActiveCartAsync(Guid customerId);
         Task<Cart> GetByIdAsync(Guid id, bool asNoTracking = false);
         Task Update(Cart entity);
