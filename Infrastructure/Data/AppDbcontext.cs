@@ -22,6 +22,16 @@ namespace Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configure Cart to use the private _items backing field
+            //modelBuilder.Entity<Cart>()
+            //    .HasMany(c => c.Items)
+            //    .WithOne(i => i.Cart)
+            //    .HasForeignKey(i => i.CartId);
+
+            //modelBuilder.Entity<Cart>()
+            //    .Navigation(c => c.Items)
+            //    .UsePropertyAccessMode(PropertyAccessMode.Field);
+
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
