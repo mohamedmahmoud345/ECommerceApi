@@ -6,19 +6,23 @@
         public DateTime Date { get; private set; }
         public Guid CustomerId { get; private set; }
         public Customer Customer { get; private set; }
-        private List<CartItem> _items = new List<CartItem>();
+        private readonly List<CartItem> _items = new();
         public DateTime CreatedAt { get; private set; }
+
         public int Quantity => _items.Sum(x => x.Quantity);
-        public decimal TotalAmount => _items.Sum(x => x.Quantity * x.Product.Price);
+        public decimal TotalAmount => _items.Sum(x => x.Quantity * x.Price);
+
+        private Cart()
+        {
+        }
         public Cart(Guid customerId)
         {
             Id = Guid.NewGuid();
             Date = DateTime.UtcNow;
             CustomerId = customerId;
             CreatedAt = DateTime.UtcNow;
-            Items = _items;
         }
-        public ICollection<CartItem> Items { get; private set; }
+        public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
 
         public void AddItem(Product product, int quantity)
         {
@@ -36,7 +40,7 @@
 
             if (item != null)
             {
-                item.UpdateQuantity(item.Quantity + quantity);
+                item.UpdateQuantity(quantity);
             }
             else
             {
