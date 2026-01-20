@@ -1,5 +1,4 @@
-﻿
-using Application.Interfaces.IRepositories;
+﻿using Application.Interfaces.IRepositories;
 using Core.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -26,12 +25,15 @@ namespace Infrastructure.Repositories
                 _context.Carts.Remove(cart);
         }
 
-        public async Task<Cart?> GetByCustomerIdAsync(Guid customerId)
+        public async Task<Cart?> GetByCustomerIdAsync(Guid customerId, bool asNoTracking)
         {
-            return await _context.Carts
-                .Include(x => x.Items)
-                .ThenInclude(x => x.Product)
-                .FirstOrDefaultAsync(x => x.CustomerId == customerId);
+            var query = _context.Carts.Include(x => x.Items)
+                .ThenInclude(x => x.Product).AsQueryable();
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.FirstOrDefaultAsync(x => x.CustomerId == customerId);
         }
 
         public async Task<Cart> GetByIdAsync(Guid id, bool asNoTracking = false)

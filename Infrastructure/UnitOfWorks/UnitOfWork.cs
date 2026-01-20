@@ -1,7 +1,6 @@
 ﻿
 using Application.Interfaces.IRepositories;
 using Application.IUnitOfWorks;
-using Core.Entities;
 using Infrastructure.Data;
 
 namespace Infrastructure.UnitOfWorks
@@ -45,15 +44,6 @@ namespace Infrastructure.UnitOfWorks
 
         public async Task<int> SaveChangesAsync()
         {
-            var cartItemStates = _context.ChangeTracker
-                    .Entries<CartItem>()
-                    .Select(e => new
-                    {
-                        ProductId = e.Entity.ProductId,
-                        State = e.State,
-                        IsNew = e.Entity.Id == Guid.NewGuid() // This won't work, but shows the ID
-                    })
-                    .ToList();
             return await _context.SaveChangesAsync();
         }
     }
