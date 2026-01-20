@@ -17,28 +17,27 @@ namespace Application.Features.Cart.Commands.AddItemToCart
 
         public async Task<AddItemToCartResponse?> Handle(AddItemToCartCommand request, CancellationToken cancellationToken)
         {
-            var cart = await _unitOfWork.Carts.GetByCustomerIdAsync(request.CustomerId);
+            var cart = await _unitOfWork.Carts.GetByCustomerIdAsync(request.CustomerId, asNoTracking: false);
+            var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId, asNoTracking: true);
 
-            var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
             if (product == null)
                 return null;
 
-            if (cart == null)
+            bool isNewCart = cart == null;
+
+            if (isNewCart)
             {
                 cart = new Core.Entities.Cart(request.CustomerId);
-                //await _unitOfWork.Carts.AddAsync(cart);
             }
 
-            cart.AddItem(product, request.Quantity);
-            if (cart.Id != Guid.Empty) // If it's an existing cart
-            {
-                await _unitOfWork.Carts.Update(cart);
-            }
+            cart.AddItem(product, request.Quantity);  
+
+            if (isNewCart)
+                await _unitOfWork.Carts.AddAsync(cart); 
+
             await _unitOfWork.SaveChangesAsync();
 
-            var cartResult = _mapper.Map<AddItemToCartResponse>(cart);
-
-            return cartResult;
+            return _mapper.Map<AddItemToCartResponse>(cart);
         }
     }
 }
