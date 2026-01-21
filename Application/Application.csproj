@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Cart\Commands\DeleteItemFromCart\" />
+    <Folder Include="Features\Cart\Commands\UpdateItemQuantity\" />
   </ItemGroup>
 
 </Project>
