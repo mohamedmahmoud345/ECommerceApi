@@ -2,6 +2,7 @@
 using Api.Dto.Cart;
 using Application.Features.Cart.Commands.AddItemToCart;
 using Application.Features.Cart.Commands.DeleteItemFromCart;
+using Application.Features.Cart.Commands.UpdateItemQuantity;
 using Application.Features.Cart.Queries.GetAllCartItemsByCustomerId;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,17 @@ namespace Api.Controllers
                 deleteItem.ItemId
             );
             var success = await _mediator.Send(command);
+            if (!success)
+                return BadRequest();
+
+            return NoContent();
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update(UpdateItemQuantityDto item)
+        {
+            var command = new UpdateItemQuantityCommand(item.CustomerId, item.ItemId, item.quantity);
+            var success = await _mediator.Send(command);
+
             if (!success)
                 return BadRequest();
 
