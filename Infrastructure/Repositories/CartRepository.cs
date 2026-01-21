@@ -36,16 +36,17 @@ namespace Infrastructure.Repositories
             return await query.FirstOrDefaultAsync(x => x.CustomerId == customerId);
         }
 
-        public async Task<Cart> GetByIdAsync(Guid id, bool asNoTracking = false)
+        public async Task<CartItem> GetItemByIdAsync(Guid id, bool asNoTracking = false)
         {
             var query = _context.Carts
-                .Include(x => x.Items)
-                .AsQueryable();
+            .SelectMany(x => x.Items)
+            .AsQueryable();
 
             if (asNoTracking)
                 query = query.AsNoTracking();
 
-            return await query.FirstOrDefaultAsync(x => x.Id == id);
+            var item = await query.FirstOrDefaultAsync(x => x.Id == id);
+            return item;
         }
 
         public async Task<bool> HasActiveCartAsync(Guid customerId)
