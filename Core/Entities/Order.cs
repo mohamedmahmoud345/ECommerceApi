@@ -4,10 +4,9 @@ namespace Core.Entities
 {
     public class Order
     {
-        public Order(DateTime date, OrderStatus status, Guid customerId)
+        public Order(OrderStatus status, Guid customerId)
         {
             Id = Guid.NewGuid();
-            Date = date;
             Status = status;
             CustomerId = customerId;
             CreatedAt = DateTime.UtcNow;
@@ -16,7 +15,6 @@ namespace Core.Entities
         public Guid Id { get; private set; }
         private List<OrderItem> _items = new();
         public decimal TotalAmount => _items.Sum(x => x.TotalAmount());
-        public DateTime Date { get; private set; }  
         public OrderStatus Status { get; private set; }
         public Guid CustomerId { get; private set; }
         public Customer Customer { get; private set; }
