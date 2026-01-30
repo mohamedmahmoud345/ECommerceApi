@@ -24,10 +24,10 @@
   <ItemGroup>
     <Folder Include="Features\Cart\Commands\DeleteItemFromCart\" />
     <Folder Include="Features\Cart\Commands\UpdateItemQuantity\" />
-    <Folder Include="Features\Order\" />
-    <Folder Include="Features\Order\Commands\" />
-    <Folder Include="Features\Order\Commands\AddOrder\" />
-    <Folder Include="Features\Order\Queries\" />
+    <Folder Include="Features\Orders\" />
+    <Folder Include="Features\Orders\Queries\" />
+    <Folder Include="Features\Orders\Queries\GetAllOrdersByCustomerId\" />
+    <Folder Include="Mapping\Orders\" />
   </ItemGroup>
 
 </Project>

@@ -12,6 +12,9 @@ namespace Infrastructure.Configurations
                 .WithOne(x => x.Order)
                 .HasForeignKey(x => x.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property(x => x.Status)
+                .HasConversion<string>();
         }
     }
 }

@@ -28,12 +28,18 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Order>?> GetByCustomerIdAsync(Guid customerId)
         {
-            return await _context.Orders.AsNoTracking().Where(x => x.CustomerId == customerId).ToListAsync();
+            return await _context.Orders.Include(x => x.Items)
+                .ThenInclude(x => x.Product)
+                .AsNoTracking()
+                .Where(x => x.CustomerId == customerId).ToListAsync();
         }
 
         public async Task<Order> GetByIdAsync(Guid id, bool asNoTracking)
         {
-            var query = _context.Orders.AsQueryable();
+            var query = _context.Orders
+                .Include(x => x.Items)
+                .ThenInclude(x => x.Product)
+                .AsQueryable();
 
             if (asNoTracking)
                 query = query.AsNoTracking();
