@@ -18,8 +18,10 @@ namespace Application.Mapping.Orders
             CreateMap<Order, AddOrderResponse>()
                 .ForMember(x => x.OrderItems, x => x.MapFrom(x => x.Items));
 
-            CreateMap<Order, GetAllOrdersByCustomerIdResponse>()
-                .ForMember(x => x.NumberOfOrder, x => x.MapFrom(x => x.Items.Count));
+            CreateMap<Order, GetAllOrdersByCustomerIdResponse>();
+
+            CreateMap<Order, GetAllOrdersByCustomerIdResponse.Orders>();
+                
         }
     }
 }

@@ -27,6 +27,7 @@
     <Folder Include="Features\Orders\" />
     <Folder Include="Features\Orders\Queries\" />
     <Folder Include="Features\Orders\Queries\GetAllOrdersByCustomerId\" />
+    <Folder Include="Features\Orders\Queries\GetByOrderId\" />
     <Folder Include="Mapping\Orders\" />
   </ItemGroup>
 

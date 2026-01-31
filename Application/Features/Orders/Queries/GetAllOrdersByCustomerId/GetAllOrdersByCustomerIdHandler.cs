@@ -21,13 +21,19 @@ namespace Application.Features.Orders.Queries.GetAllOrdersByCustomerId
             if (customer is null)
                 return null;
 
-            var cart = await _unitOfWork.Carts.GetByCustomerIdAsync(request.CustomerId);
-            if (cart is null && !cart!.Items.Any())
+            var orders = await _unitOfWork.Orders.GetByCustomerIdAsync(customer.Id);
+            if (orders is null && !orders!.Any())
                 return null;
 
-            var response = _mapper.Map<GetAllOrdersByCustomerIdResponse>(cart.Items);
+            var response = _mapper.Map<List<GetAllOrdersByCustomerIdResponse.Orders>>(orders);
 
-            return response;
+            return new GetAllOrdersByCustomerIdResponse()
+            {
+                CustomerId = customer.Id,
+                TotalAmount = orders.Sum(x => x.TotalAmount),
+                NumberOfOrders = orders.Count(),
+                OrderList = response
+            };
         }
     }
 }
