@@ -32,6 +32,7 @@ namespace Application.Features.Orders.Commands.AddOrder
                 order.AddItem(cartItem.ProductId, cartItem.Quantity, cartItem.Price);
             }
             await _unitOfWork.Orders.AddAsync(order);
+            cart.ClearCart();
             await _unitOfWork.SaveChangesAsync();
 
             var response = _mapper.Map<AddOrderResponse>(order);
