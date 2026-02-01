@@ -22,7 +22,7 @@ namespace Application.Features.Orders.Queries.GetAllOrdersByCustomerId
                 return null;
 
             var orders = await _unitOfWork.Orders.GetByCustomerIdAsync(customer.Id);
-            if (orders is null && !orders!.Any())
+            if (orders is null || !orders!.Any())
                 return null;
 
             var response = _mapper.Map<List<GetAllOrdersByCustomerIdResponse.Orders>>(orders);
