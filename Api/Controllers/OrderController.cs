@@ -1,6 +1,7 @@
 using Api.Dto.Order;
 using Application.Features.Cart.Queries.GetAllCartItemsByCustomerId;
 using Application.Features.Orders.Commands.AddOrder;
+using Application.Features.Orders.Commands.CancelOrder;
 using Application.Features.Orders.Queries.GetAllOrdersByCustomerId;
 using Application.Features.Orders.Queries.GetByOrderId;
 using Core.Enums;
@@ -51,6 +52,18 @@ namespace Api.Controllers
                 return BadRequest();
 
             return Ok(result);
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> CancelOrder(Guid id)
+        {
+            var command = new CancelOrderCommand(id);
+
+            var result = await _mediator.Send(command);
+            if (result == null)
+                return BadRequest();
+
+            return NoContent();
         }
     }
 }
