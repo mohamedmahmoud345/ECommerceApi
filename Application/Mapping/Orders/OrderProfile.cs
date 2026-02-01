@@ -2,6 +2,7 @@
 using Application.Features.Orders.Commands.AddOrder;
 using Application.Features.Orders.Common;
 using Application.Features.Orders.Queries.GetAllOrdersByCustomerId;
+using Application.Features.Orders.Queries.GetByOrderId;
 using AutoMapper;
 using Core.Entities;
 
@@ -21,7 +22,10 @@ namespace Application.Mapping.Orders
             CreateMap<Order, GetAllOrdersByCustomerIdResponse>();
 
             CreateMap<Order, GetAllOrdersByCustomerIdResponse.Orders>();
-                
+
+            CreateMap<Order, GetByOrderIdResponse>()
+                .ForMember(x => x.TotalAmount, x => x.MapFrom(x => x.Items.Sum(x => x.TotalAmount())))
+                .ForMember(x => x.OrderItems, x => x.MapFrom(x => x.Items));
         }
     }
 }

@@ -1,6 +1,8 @@
 using Api.Dto.Order;
 using Application.Features.Cart.Queries.GetAllCartItemsByCustomerId;
 using Application.Features.Orders.Commands.AddOrder;
+using Application.Features.Orders.Queries.GetAllOrdersByCustomerId;
+using Application.Features.Orders.Queries.GetByOrderId;
 using Core.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,10 +19,21 @@ namespace Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpGet("{id:guid}")]
+        [HttpGet("customer/{id:guid}")]
         public async Task<IActionResult> GetAllByCustomerId(Guid id)
         {
-            var query = new GetAllCartItemsByCustomerIdQuery(id);
+            var query = new GetAllOrdersByCustomerIdQuery(id);
+
+            var result = await _mediator.Send(query);
+            if (result is null)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetOrderById(Guid id)
+        {
+            var query = new GetByOrderIdQuery(id);
 
             var result = await _mediator.Send(query);
             if (result is null)
