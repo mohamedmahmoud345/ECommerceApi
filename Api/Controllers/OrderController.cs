@@ -60,7 +60,7 @@ namespace Api.Controllers
             var command = new CancelOrderCommand(id);
 
             var result = await _mediator.Send(command);
-            if (result == null)
+            if (result == false)
                 return BadRequest();
 
             return NoContent();

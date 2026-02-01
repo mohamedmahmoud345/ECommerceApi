@@ -20,8 +20,8 @@ namespace Application.Features.Orders.Commands.CancelOrder
             if (order is null || order.Status != OrderStatus.Pending)
                 return false;
 
-            if (order.Status == OrderStatus.Cancelled)
-                return true;
+            // if (order.Status == OrderStatus.Cancelled)
+            //     return true;
             order.UpdateStatus(OrderStatus.Cancelled);
             await _unitOfWork.SaveChangesAsync();
 

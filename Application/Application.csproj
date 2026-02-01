@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Cart\Commands\ClearCart\" />
     <Folder Include="Features\Cart\Commands\DeleteItemFromCart\" />
     <Folder Include="Features\Cart\Commands\UpdateItemQuantity\" />
     <Folder Include="Features\Orders\" />
