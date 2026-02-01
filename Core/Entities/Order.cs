@@ -19,7 +19,7 @@ namespace Core.Entities
         public Guid CustomerId { get; private set; }
         public Customer Customer { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly(); 
+        public IReadOnlyCollection<OrderItem> Items => _items.AsReadOnly();
         public void AddItem(Guid productId, int quantity, decimal unitPrice)
         {
             var item = new OrderItem(Id, productId, quantity, unitPrice);
@@ -27,8 +27,13 @@ namespace Core.Entities
         }
         public void UpdateStatus(OrderStatus newStatus)
         {
+            if (Status == OrderStatus.Delivered && newStatus == OrderStatus.Pending)
+                return;
+            if (Status == OrderStatus.Cancelled && newStatus == OrderStatus.Shipped)
+                return;
+
             Status = newStatus;
         }
-        
+
     }
 }
