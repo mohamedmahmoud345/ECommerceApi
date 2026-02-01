@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Api.Dto.Cart;
 using Application.Features.Cart.Commands.AddItemToCart;
+using Application.Features.Cart.Commands.ClearCart;
 using Application.Features.Cart.Commands.DeleteItemFromCart;
 using Application.Features.Cart.Commands.UpdateItemQuantity;
 using Application.Features.Cart.Queries.GetAllCartItemsByCustomerId;
@@ -64,6 +65,17 @@ namespace Api.Controllers
             var command = new UpdateItemQuantityCommand(item.CustomerId, item.ItemId, item.quantity);
             var success = await _mediator.Send(command);
 
+            if (!success)
+                return BadRequest();
+
+            return NoContent();
+        }
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> ClearCart(Guid id)
+        {
+            var command = new ClearCartCommand(id);
+
+            var success = await _mediator.Send(command);
             if (!success)
                 return BadRequest();
 
