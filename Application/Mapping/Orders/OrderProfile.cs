@@ -26,6 +26,9 @@ namespace Application.Mapping.Orders
             CreateMap<Order, GetByOrderIdResponse>()
                 .ForMember(x => x.TotalAmount, x => x.MapFrom(x => x.Items.Sum(x => x.TotalAmount())))
                 .ForMember(x => x.OrderItems, x => x.MapFrom(x => x.Items));
+
+            CreateMap<Payment, AddOrderResponse>()
+                ;
         }
     }
 }

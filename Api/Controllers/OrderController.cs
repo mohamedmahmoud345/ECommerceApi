@@ -45,7 +45,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrder(AddOrderDto orderDto)
         {
-            var command = new AddOrderCommand(orderDto.CustomerId);
+            var command = new AddOrderCommand(orderDto.CustomerId, orderDto.PaymentMethod);
 
             var result = await _mediator.Send(command);
             if (result == null)

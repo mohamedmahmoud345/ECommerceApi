@@ -6,10 +6,11 @@ namespace Application.Features.Orders.Commands.AddOrder
     public class AddOrderCommand : IRequest<AddOrderResponse>
     {
         public Guid CustomerId { get; set; }
-
-        public AddOrderCommand(Guid customerId)
+        public PaymentMethod PaymentMethod { get; set; }
+        public AddOrderCommand(Guid customerId, PaymentMethod paymentMethod)
         {
             CustomerId = customerId;
+            PaymentMethod = paymentMethod;
         }
     }
 }
