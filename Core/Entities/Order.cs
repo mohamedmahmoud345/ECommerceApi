@@ -31,7 +31,15 @@ namespace Core.Entities
                 return;
             if (Status == OrderStatus.Cancelled && newStatus == OrderStatus.Shipped)
                 return;
-
+            if (Status == OrderStatus.Pending && newStatus == OrderStatus.Delivered)
+                return;            
+            if (Status == OrderStatus.Pending && newStatus == OrderStatus.Delivered)
+                return;
+            if (Status == OrderStatus.Shipped && newStatus == OrderStatus.Cancelled)
+                return;
+            if (Status == OrderStatus.Delivered && newStatus == OrderStatus.Pending)
+                return;
+            
             Status = newStatus;
         }
 
