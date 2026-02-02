@@ -16,11 +16,9 @@ namespace Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IWebHostEnvironment _environment;
         public ProductController(IMediator mediator, IWebHostEnvironment environment)
         {
             _mediator = mediator;
-            _environment = environment;
         }
 
         [HttpGet]
