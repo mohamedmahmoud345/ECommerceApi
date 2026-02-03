@@ -30,7 +30,12 @@
     <Folder Include="Features\Orders\Queries\" />
     <Folder Include="Features\Orders\Queries\GetAllOrdersByCustomerId\" />
     <Folder Include="Features\Orders\Queries\GetByOrderId\" />
+    <Folder Include="Features\Payments\" />
+    <Folder Include="Features\Payments\Commands\" />
+    <Folder Include="Features\Payments\Commands\ProcessPayment\" />
+    <Folder Include="Features\Payments\Queries\" />
     <Folder Include="Mapping\Orders\" />
+    <Folder Include="Mapping\Payments\" />
   </ItemGroup>
 
 </Project>
