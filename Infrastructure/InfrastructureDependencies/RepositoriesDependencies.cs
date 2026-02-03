@@ -20,6 +20,7 @@ namespace Infrastructure.Dependecies
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IFileStorageService, LocalFileStorageService>();
+            services.AddScoped<IPaymentService, SimulatedPaymentService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
