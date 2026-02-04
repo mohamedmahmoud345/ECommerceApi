@@ -34,7 +34,11 @@ namespace Infrastructure.Repositories
                     .FirstOrDefaultAsync();
             return payment;
         }
-
+        
+        public async Task<Payment> GetByOrderId(Guid OrderId)
+        {
+            return await _context.Payments.FirstOrDefaultAsync(x => x.OrderId == OrderId);
+        }
         public async Task<Payment> GetByIdAsync(Guid id, bool asNoTracking = false)
         {
             var query = _context.Payments.AsQueryable();
