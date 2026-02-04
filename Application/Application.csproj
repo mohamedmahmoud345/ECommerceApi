@@ -31,6 +31,7 @@
     <Folder Include="Features\Orders\Queries\GetAllOrdersByCustomerId\" />
     <Folder Include="Features\Orders\Queries\GetByOrderId\" />
     <Folder Include="Features\Payments\Commands\ProcessPayment\" />
+    <Folder Include="Features\Payments\Queries\GetById\" />
     <Folder Include="Features\Payments\Queries\GetPaymentByOrderId\" />
     <Folder Include="Mapping\Orders\" />
     <Folder Include="Mapping\Payments\" />

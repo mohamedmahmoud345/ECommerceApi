@@ -3,6 +3,7 @@ using Application.Features.Orders.Queries.GetByOrderId;
 using Application.Features.Payments.Commands.ProcessPayment;
 using Application.Features.Payments.Commands.UpdatePaymentStatus;
 using Application.Features.Payments.Queries.GetByCustomerId;
+using Application.Features.Payments.Queries.GetById;
 using Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -44,6 +45,17 @@ namespace Api.Controllers
                 return BadRequest();
 
             return NoContent();
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var query = new GetByIdQuery(id);
+
+            var result = await _mediator.Send(query);
+            if (result is null)
+                return BadRequest();
+
+            return Ok(result);
         }
 
         [HttpGet("order/{Id:guid}")]
