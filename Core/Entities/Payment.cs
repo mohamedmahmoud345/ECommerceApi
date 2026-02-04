@@ -27,7 +27,27 @@ namespace Core.Entities
         }
         public void UpdateStatus(PaymentStatus newStatus)
         {
+            ValidateStatusTransition(newStatus);
             Status = newStatus;
+        }
+
+        private void ValidateStatusTransition(PaymentStatus newStatus)
+        {
+            // Cannot change from a terminal state
+            if (Status == PaymentStatus.Refunded)
+                throw new InvalidOperationException("Cannot change status of a refunded payment.");
+
+            // Cannot change Completed payment to Pending
+            if (Status == PaymentStatus.Completed && newStatus == PaymentStatus.Pending)
+                throw new InvalidOperationException("Cannot revert a completed payment to pending.");
+
+            // Cannot change Failed payment to Pending
+            if (Status == PaymentStatus.Failed && newStatus == PaymentStatus.Pending)
+                throw new InvalidOperationException("Cannot revert a failed payment to pending.");
+
+            // Can only refund a completed payment
+            if (newStatus == PaymentStatus.Refunded && Status != PaymentStatus.Completed)
+                throw new InvalidOperationException("Can only refund a completed payment.");
         }
 
     }
