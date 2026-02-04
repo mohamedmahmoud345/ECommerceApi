@@ -1,5 +1,6 @@
 using System;
 using Application.Features.Payments.Commands.ProcessPayment;
+using Application.Features.Payments.Queries.GetPaymentByOrderId;
 using AutoMapper;
 using Core.Entities;
 
@@ -10,6 +11,8 @@ namespace Application.Mapping.Payments
         public PaymentProfile()
         {
             CreateMap<Payment, ProcessPaymentResponse>();
+
+            CreateMap<Payment, GetPaymentByOrderIdResponse>();
         }
     }
 }
