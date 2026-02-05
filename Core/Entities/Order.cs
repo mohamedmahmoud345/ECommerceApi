@@ -28,19 +28,15 @@ namespace Core.Entities
         public void UpdateStatus(OrderStatus newStatus)
         {
             if (Status == OrderStatus.Delivered && newStatus == OrderStatus.Pending)
-                return;
+                throw new InvalidOperationException();
             if (Status == OrderStatus.Cancelled && newStatus == OrderStatus.Shipped)
-                return;
-            if (Status == OrderStatus.Paid && newStatus == OrderStatus.Cancelled)
-                return;
+                throw new InvalidOperationException();
             if (Status == OrderStatus.Pending && newStatus == OrderStatus.Delivered)
-                return;
-            if (Status == OrderStatus.Shipped && newStatus == OrderStatus.Cancelled)
-                return;
-            if (Status == OrderStatus.Delivered && newStatus == OrderStatus.Pending)
-                return;
+                throw new InvalidOperationException();
             if (Status == OrderStatus.Delivered && newStatus == OrderStatus.Paid)
-                return;
+                throw new InvalidOperationException();
+            if (Status == OrderStatus.Paid && newStatus == OrderStatus.Delivered)
+                throw new InvalidOperationException();
 
             Status = newStatus;
         }

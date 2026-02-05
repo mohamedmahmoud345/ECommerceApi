@@ -27,6 +27,8 @@
     <Folder Include="Features\Cart\Commands\UpdateItemQuantity\" />
     <Folder Include="Features\Orders\" />
     <Folder Include="Features\Orders\Commands\CancelOrder\" />
+    <Folder Include="Features\Orders\Commands\RefundOrder\" />
+    <Folder Include="Features\Orders\Commands\UpdateOrderStatus\" />
     <Folder Include="Features\Orders\Queries\" />
     <Folder Include="Features\Orders\Queries\GetAllOrdersByCustomerId\" />
     <Folder Include="Features\Orders\Queries\GetByOrderId\" />

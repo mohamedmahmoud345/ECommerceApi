@@ -1,12 +1,11 @@
 using Api.Dto.Order;
-using Application.Features.Cart.Queries.GetAllCartItemsByCustomerId;
 using Application.Features.Orders.Commands.AddOrder;
 using Application.Features.Orders.Commands.CancelOrder;
+using Application.Features.Orders.Commands.RefundOrder;
+using Application.Features.Orders.Commands.UpdateOrderStatus;
 using Application.Features.Orders.Queries.GetAllOrdersByCustomerId;
 using Application.Features.Orders.Queries.GetByOrderId;
-using Core.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -61,6 +60,30 @@ namespace Api.Controllers
 
             var result = await _mediator.Send(command);
             if (result == false)
+                return BadRequest();
+
+            return NoContent();
+        }
+
+        [HttpPut("status")]
+        public async Task<IActionResult> UpdateOrderStatus(UpdateOrderStatusDto statusDto)
+        {
+            var command = new UpdateOrderStatusCommand(statusDto.OrderId, statusDto.OrderStatus);
+
+            var result = await _mediator.Send(command);
+            if (result is false)
+                return BadRequest();
+
+            return NoContent();
+        }
+
+        [HttpPut("refund/{orderId:guid}")]
+        public async Task<IActionResult> RefundOrder(Guid orderId)
+        {
+            var command = new RefundOrderCommand(orderId);
+
+            var result = await _mediator.Send(command);
+            if (result is false)
                 return BadRequest();
 
             return NoContent();
