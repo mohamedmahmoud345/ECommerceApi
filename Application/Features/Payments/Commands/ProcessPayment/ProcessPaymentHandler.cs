@@ -32,8 +32,13 @@ namespace Application.Features.Payments.Commands.ProcessPayment
             if (order.TotalAmount <= 0)
                 throw new InvalidOperationException("Order amount must be greater than zero");
 
-            var payment =
-             new Payment(request.OrderId, order.TotalAmount, request.PaymentMethod, PaymentStatus.Pending, DateTime.UtcNow);
+            // var payment =
+            //  new Payment(request.OrderId, order.TotalAmount, request.PaymentMethod, PaymentStatus.Pending, DateTime.UtcNow);
+
+            var payment = await _unitOfWork.Payments.GetByOrderId(order.Id);
+
+            if (payment is null)
+                throw new NullReferenceException();
 
             var success = await _paymentService.ProcessPaymentAsync(payment.Amount, payment.Method);
 
@@ -45,7 +50,7 @@ namespace Application.Features.Payments.Commands.ProcessPayment
             if (payment.Status == PaymentStatus.Completed)
                 order.UpdateStatus(OrderStatus.Paid);
 
-            await _unitOfWork.Payments.AddAsync(payment);
+            // await _unitOfWork.Payments.AddAsync(payment);
             await _unitOfWork.SaveChangesAsync();
 
             var response = _mapper.Map<ProcessPaymentResponse>(payment);

@@ -33,7 +33,7 @@ namespace Application.Features.Orders.Commands.AddOrder
             }
             await _unitOfWork.Orders.AddAsync(order);
             var payment =
-                new Payment(order.Id, order.TotalAmount, request.PaymentMethod, PaymentStatus.Pending, DateTime.Now);
+                new Payment(order.Id, order.TotalAmount, request.PaymentMethod, PaymentStatus.Pending, DateTime.UtcNow);
             await _unitOfWork.Payments.AddAsync(payment);
             cart.ClearCart();
             await _unitOfWork.SaveChangesAsync();
