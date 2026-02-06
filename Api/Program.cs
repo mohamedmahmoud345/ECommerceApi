@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
+using Api.Middlewares;
 using Api.Services;
 using Application;
 using Application.Interfaces.Services;
-using Application.Middlewares;
 using Infrastructure.Data;
 using Infrastructure.Dependecies;
 using Microsoft.EntityFrameworkCore;
@@ -29,28 +29,24 @@ builder.Services
     .AddRepositoriesDependencies()
     .AddApplicationDependencies();
 builder.Services.AddScoped<IFilePathProvider, FilePathProvider>();
+
 #endregion
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-
-
 app.MapControllers();
-
 
 app.Run();

@@ -22,6 +22,7 @@
   <ItemGroup>
     <Folder Include="Dto\Order\" />
     <Folder Include="Dto\Payment\" />
+    <Folder Include="Middlewares\" />
     <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\Products\" />
   </ItemGroup>
