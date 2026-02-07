@@ -1,3 +1,4 @@
-namespace Api.Dto.Cart;
-
-public record class DeleteItemDto(Guid CustomerId, Guid ItemId);
+namespace Api.Dto.Cart
+{
+    public record DeleteItemDto(Guid CustomerId, Guid ItemId);
+}

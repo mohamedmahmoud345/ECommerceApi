@@ -1,4 +1,3 @@
-using System;
 
 namespace Api.Dto.Cart
 {

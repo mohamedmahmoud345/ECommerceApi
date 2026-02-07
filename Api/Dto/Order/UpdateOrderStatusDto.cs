@@ -2,6 +2,6 @@ using Core.Enums;
 
 namespace Api.Dto.Order
 {
-    public record class UpdateOrderStatusDto
+    public record UpdateOrderStatusDto
         (Guid OrderId, OrderStatus OrderStatus);
 }
