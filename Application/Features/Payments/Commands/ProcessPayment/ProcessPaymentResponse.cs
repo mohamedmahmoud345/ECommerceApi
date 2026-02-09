@@ -1,4 +1,3 @@
-using System;
 using Core.Enums;
 
 namespace Application.Features.Payments.Commands.ProcessPayment

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Api.Dto.Cart;
+﻿using Api.Dto.Cart;
 using Application.Features.Cart.Commands.AddItemToCart;
 using Application.Features.Cart.Commands.ClearCart;
 using Application.Features.Cart.Commands.DeleteItemFromCart;

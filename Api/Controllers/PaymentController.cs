@@ -4,9 +4,7 @@ using Application.Features.Payments.Commands.ProcessPayment;
 using Application.Features.Payments.Commands.UpdatePaymentStatus;
 using Application.Features.Payments.Queries.GetByCustomerId;
 using Application.Features.Payments.Queries.GetById;
-using Core.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
