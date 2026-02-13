@@ -2,7 +2,7 @@
 {
     public class Customer
     {
-        public Customer(string name, string email, string address, string phone)
+        public Customer(string name, string email, string address, string phone, Guid userId)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name is required", nameof(name));
@@ -14,6 +14,7 @@
             Address = address;
             Phone = phone;
             CreatedAt = DateTime.UtcNow;
+            UserId = userId;
         }
 
         public Guid Id { get; private set; }
@@ -23,7 +24,7 @@
         public string Address { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public Cart? Cart { get; private set; }
-
+        public Guid UserId { get; private set; }
         public void Rename(string name) 
         {
             if (string.IsNullOrWhiteSpace(name))
