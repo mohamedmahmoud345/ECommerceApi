@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.IRepositories;
 using Application.Interfaces.Services;
+using Application.Interfaces.Services.GenerateToken;
 using Application.IUnitOfWorks;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
@@ -23,6 +24,8 @@ namespace Infrastructure.Dependecies
             services.AddScoped<IPaymentService, SimulatedPaymentService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IGenerateJwtToken, GenerateJwtToken>();
+            services.AddScoped<IAuthService, AuthService>();
             return services;
         }
     }
