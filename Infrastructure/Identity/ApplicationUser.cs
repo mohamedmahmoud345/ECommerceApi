@@ -5,6 +5,6 @@ namespace Infrastructure.Identity
 {
     public class ApplicationUser : IdentityUser<Guid>
     {
-        public Customer Customer { get; set; }
+        public Customer? Customer { get; set; }
     }
 }
