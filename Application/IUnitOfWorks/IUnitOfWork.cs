@@ -14,5 +14,6 @@ namespace Application.IUnitOfWorks
         IPaymentRepository Payments { get; }
 
         Task<int> SaveChangesAsync();
+        Task ExecuteInTransactionAsync(Func<Task> action, CancellationToken cancellationToken = default);
     }
 }
