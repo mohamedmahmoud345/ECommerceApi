@@ -1,20 +1,21 @@
-﻿namespace Application.Common;
-
-public static class IQueryableExtensions
+﻿namespace Application.Common
 {
-    public static async Task<PageResult<T>> ToPagedResultAsync<T>(this IQueryable<T> query, int page, int pageSize)
+    public static class IQueryableExtensions
     {
-        var totalCount = query.Count();
-        var data = query.Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-
-        return new PageResult<T>()
+        public static async Task<PageResult<T>> ToPagedResultAsync<T>(this IQueryable<T> query, int page, int pageSize)
         {
-            Page = page,
-            Count = totalCount,
-            PageSize = pageSize,
-            Data = data
-        };
+            var totalCount = query.Count();
+            var data = query.Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new PageResult<T>()
+            {
+                Page = page,
+                Count = totalCount,
+                PageSize = pageSize,
+                Data = data
+            };
+        }
     }
 }
