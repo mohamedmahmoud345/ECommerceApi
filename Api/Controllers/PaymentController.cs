@@ -5,10 +5,12 @@ using Application.Features.Payments.Commands.UpdatePaymentStatus;
 using Application.Features.Payments.Queries.GetByCustomerId;
 using Application.Features.Payments.Queries.GetById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize(Roles = "Customer")]
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentController : ControllerBase

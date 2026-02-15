@@ -6,10 +6,12 @@ using Application.Features.Orders.Commands.UpdateOrderStatus;
 using Application.Features.Orders.Queries.GetAllOrdersByCustomerId;
 using Application.Features.Orders.Queries.GetByOrderId;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize(Roles = "Customer")]
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase

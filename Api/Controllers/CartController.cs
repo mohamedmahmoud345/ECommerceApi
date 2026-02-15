@@ -5,10 +5,12 @@ using Application.Features.Cart.Commands.DeleteItemFromCart;
 using Application.Features.Cart.Commands.UpdateItemQuantity;
 using Application.Features.Cart.Queries.GetAllCartItemsByCustomerId;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize(Roles ="Customer")]
     [Route("api/[controller]")]
     [ApiController]
     public class CartController : ControllerBase

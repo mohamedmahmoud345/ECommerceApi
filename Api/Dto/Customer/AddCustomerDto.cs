@@ -1,4 +1,4 @@
 ﻿namespace Api.Dto.Customer
 {
-    public record AddCustomerDto(string Name, string Email, string Phone, string Address);
+    public record AddCustomerDto(string Name, Guid UserId, string Phone, string Address);
 }

@@ -6,10 +6,12 @@ using Application.Features.Reviews.Queries.GetAllReviewsByCustomerId;
 using Application.Features.Reviews.Queries.GetAllReviewsByProductId;
 using Application.Features.Reviews.Queries.GetReviewById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize(Roles = "Customer")]
     [ApiController]
     [Route("api/[controller]")]
     public class ReviewController : ControllerBase

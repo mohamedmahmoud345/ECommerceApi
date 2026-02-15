@@ -30,11 +30,6 @@ namespace Infrastructure.Repositories
                 _context.Customers.Remove(customer);
         }
 
-        public async Task<Customer> GetByEmailAsync(string email)
-        {
-            return await _context.Customers.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
-        }
-
         public async Task<Customer> GetByIdAsync(Guid id, bool asNoTracking = false)
         {
             var query = _context.Customers

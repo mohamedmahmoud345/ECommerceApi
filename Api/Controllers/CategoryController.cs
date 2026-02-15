@@ -5,6 +5,7 @@ using Application.Features.Categories.Commands.UpdateCategory;
 using Application.Features.Categories.Queries.GetAllCategories;
 using Application.Features.Categories.Queries.GetCategoryById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -23,8 +24,8 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var categories = await _mediator.Send(new GetAllCategoriesQuery(page , pageSize));
-            
+            var categories = await _mediator.Send(new GetAllCategoriesQuery(page, pageSize));
+
             return Ok(categories);
         }
 
@@ -37,7 +38,7 @@ namespace Api.Controllers
 
             return Ok(category);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Add(AddCategoryDto categoryDto)
         {
@@ -50,6 +51,7 @@ namespace Api.Controllers
 
             return CreatedAtAction(nameof(GetById), new { Id = category.Id }, category);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(Guid id, UpdateCategoryDto categoryDto)
         {
@@ -68,6 +70,7 @@ namespace Api.Controllers
 
             return NoContent();
         }
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

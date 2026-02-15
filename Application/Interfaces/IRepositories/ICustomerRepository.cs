@@ -6,7 +6,6 @@ namespace Application.Interfaces.IRepositories
     public interface ICustomerRepository
     {
         Task<List<Customer>> GetAllAsync();
-        Task<Customer> GetByEmailAsync(string email);
         Task<Customer> GetByIdAsync(Guid id, bool asNoTracking = false);
         Task Update(Customer entity);
         Task<Customer> AddAsync(Customer entity);

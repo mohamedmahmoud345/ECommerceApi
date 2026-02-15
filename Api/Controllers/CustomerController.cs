@@ -1,9 +1,7 @@
 ﻿using Api.Dto.Customer;
-using Application.Features.Customers.Commands.AddCustomer;
 using Application.Features.Customers.Commands.DeleteCustomer;
 using Application.Features.Customers.Commands.UpdateCustomer;
 using Application.Features.Customers.Queries.GetAllCustomers;
-using Application.Features.Customers.Queries.GetCustomerByEmail;
 using Application.Features.Customers.Queries.GetCustomerById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +21,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var customers = await _mediator.Send(new GetAllCustomersQuery(page , pageSize));
+            var customers = await _mediator.Send(new GetAllCustomersQuery(page, pageSize));
             return Ok(customers);
         }
         [HttpGet("{id}")]
@@ -33,35 +31,6 @@ namespace Api.Controllers
             if (customer == null)
                 return NotFound($"Customer with ID {id} not found");
             return Ok(customer);
-        }
-
-        [HttpGet("email/{email}")]
-        public async Task<IActionResult> GetByEmail([EmailAddress] string email)
-        {
-            var customer = await _mediator.Send(new GetCustomerByEmailQuery(email));
-            if (customer == null)
-                return NotFound($"Customer with email {email} not found");
-
-            return Ok(customer);
-        }
-        [HttpPost]
-        public async Task<IActionResult> Add(AddCustomerDto customerDto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest();
-            var customerCommand = new AddCustomerCommand()
-            {
-                Name = customerDto.Name,
-                Address = customerDto.Address,
-                Email = customerDto.Email,
-                Phone = customerDto.Phone,
-            };
-            var customer = await _mediator.Send(customerCommand);
-
-            if (customer == null)
-                return BadRequest("Email already exists");
-
-            return CreatedAtAction(nameof(GetById), new { Id = customer.Id }, customer);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
@@ -87,7 +56,6 @@ namespace Api.Controllers
                 Id = customerDto.Id,
                 Name = customerDto.Name,
                 Address = customerDto.Address,
-                Email = customerDto.Email,
                 Phone = customerDto.Phone
             };
 

@@ -7,6 +7,7 @@ using Application.Features.Products.Queries.GetAllProducts;
 using Application.Features.Products.Queries.GetProductById;
 using Application.Features.Products.Queries.GetProductsByCategoryId;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -51,7 +52,7 @@ namespace Api.Controllers
 
             return Ok(products);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] AddProductDto productDto)
         {
@@ -75,6 +76,7 @@ namespace Api.Controllers
             return CreatedAtAction(nameof(GetById), new { Id = success.Id }, success);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Edit(Guid id, UpdateProductDto productDto)
         {
@@ -99,6 +101,7 @@ namespace Api.Controllers
 
             return NoContent();
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("image/{id}")]
         public async Task<IActionResult> EditImage(Guid id, IFormFile image)
         {
@@ -115,7 +118,7 @@ namespace Api.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{Id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
