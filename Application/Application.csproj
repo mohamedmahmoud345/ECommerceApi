@@ -22,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Account\Login\" />
+    <Folder Include="Features\Account\Register\" />
     <Folder Include="Features\Cart\Commands\ClearCart\" />
     <Folder Include="Features\Cart\Commands\DeleteItemFromCart\" />
     <Folder Include="Features\Cart\Commands\UpdateItemQuantity\" />
