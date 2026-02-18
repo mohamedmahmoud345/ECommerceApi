@@ -32,7 +32,7 @@ namespace Api.Controllers
             if (result is null)
                 return BadRequest();
 
-            return Ok(result);
+            return CreatedAtAction(nameof(Register), result);
         }
 
         [HttpPost("login")]
