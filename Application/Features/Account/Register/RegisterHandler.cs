@@ -24,7 +24,7 @@ namespace Application.Features.Account.Register
                 .RegisterUserAsync(request.Email, request.Name, request.Password);
 
             if (!authResult.Success)
-                throw new Exception(authResult.Error);
+                return null;
 
             try
             {
@@ -40,7 +40,7 @@ namespace Application.Features.Account.Register
             }
             catch
             {
-                return null;
+                throw;
             }
 
             var userRoles = await _authService.GetUserRolesAsync(authResult.UserId);
