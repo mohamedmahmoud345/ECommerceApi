@@ -23,15 +23,15 @@ namespace Infrastructure.Services
                 Email = email,
                 UserName = userName
             };
-            await _userMang.AddToRoleAsync(user, "Customer");
+
+
             var result = await _userMang.CreateAsync(user, password);
             if (!result.Succeeded)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
                 return (false, Guid.Empty, errors);
             }
-
-
+            await _userMang.AddToRoleAsync(user, "Customer");
 
             return (true, user.Id, string.Empty);
         }
