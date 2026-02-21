@@ -1,21 +1,16 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
 using Api.Dto.Account;
 using Application.Features.Account;
-using Xunit.Abstractions;
 
 namespace IntegrationTests.ControllerTests
 {
     public class AccountControllerTests : IClassFixture<CustomWebApplicationFactory>
     {
         private readonly HttpClient _client;
-        private readonly ITestOutputHelper _output;
-
-        public AccountControllerTests(CustomWebApplicationFactory factory, ITestOutputHelper output)
+        public AccountControllerTests(CustomWebApplicationFactory factory)
         {
             _client = factory.CreateClient();
-            _output = output;
         }
 
         [Fact]
