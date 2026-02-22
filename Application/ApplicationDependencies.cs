@@ -22,6 +22,7 @@ namespace Application
 
             // register validation pipeline so validators run before handlers
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehaviors<,>));
 
             return services;
         }

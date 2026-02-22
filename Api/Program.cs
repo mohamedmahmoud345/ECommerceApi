@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Core;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -25,6 +27,17 @@ builder.Services.AddControllers()
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 builder.Services.AddRouting(op => op.LowercaseUrls = true);
+
+var corsStr = "AllowFrontend";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsStr, policy =>
+    {
+        policy.AllowAnyOrigin();
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+    });
+});
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -109,6 +122,11 @@ builder.Services.AddScoped<IFilePathProvider, FilePathProvider>();
 
 #endregion
 
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration)
+        .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+        .Enrich.FromLogContext());
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -131,6 +149,8 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
+
+app.UseCors(corsStr);
 
 app.UseAuthentication();
 
