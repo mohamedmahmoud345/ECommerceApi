@@ -127,6 +127,9 @@ builder.Host.UseSerilog((context, configuration) =>
         .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
         .Enrich.FromLogContext());
 
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>("Database");
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -149,6 +152,8 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
+
+app.MapHealthChecks("health");
 
 app.UseCors(corsStr);
 
