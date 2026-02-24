@@ -145,6 +145,22 @@ builder.Services.AddHealthChecks()
 
 var app = builder.Build();
 
+// Auto-apply migrations in production
+if (app.Environment.IsProduction())
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        dbContext.Database.Migrate(); // Apply pending migrations
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
