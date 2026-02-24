@@ -82,16 +82,16 @@ builder.Services.AddSwaggerGen(options =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 });
-// connection to SQL server
+// connection to database
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    // Detect which database provider based on connection string
     var connectionString = builder.Configuration.GetConnectionString("conStr");
-    var isPostgreSQL = connectionString?.Contains("Host=") ?? false;
 
-    if (isPostgreSQL)
+    // Check for PostgreSQL (Railway uses postgresql:// format)
+    if (connectionString?.StartsWith("postgresql://") == true ||
+        connectionString?.StartsWith("postgres://") == true)
     {
-        // PostgreSQL for Railway
+        // PostgreSQL for Railway/production
         options.UseNpgsql(connectionString);
     }
     else
