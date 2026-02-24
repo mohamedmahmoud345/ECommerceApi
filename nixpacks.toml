@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ['...', 'dotnet-sdk_9']
-
-[phases.build]
-cmds = ['dotnet publish Api/Api.csproj -c Release -o out']
-
-[start]
-cmd = 'cd out && dotnet Api.dll'
