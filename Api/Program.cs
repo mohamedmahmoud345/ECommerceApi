@@ -85,7 +85,20 @@ builder.Services.AddSwaggerGen(options =>
 // connection to SQL server
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("conStr"));
+    // Detect which database provider based on connection string
+    var connectionString = builder.Configuration.GetConnectionString("conStr");
+    var isPostgreSQL = connectionString?.Contains("Host=") ?? false;
+
+    if (isPostgreSQL)
+    {
+        // PostgreSQL for Railway
+        options.UseNpgsql(connectionString);
+    }
+    else
+    {
+        // SQL Server for local development
+        options.UseSqlServer(connectionString);
+    }
 });
 
 // Add Identity
