@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Serilog.Core;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -82,23 +81,10 @@ builder.Services.AddSwaggerGen(options =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     options.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 });
-// connection to database
+// connection to SQL server
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("conStr");
-
-    // Check for PostgreSQL (Railway uses postgresql:// format)
-    if (connectionString?.StartsWith("postgresql://") == true ||
-        connectionString?.StartsWith("postgres://") == true)
-    {
-        // PostgreSQL for Railway/production
-        options.UseNpgsql(connectionString);
-    }
-    else
-    {
-        // SQL Server for local development
-        options.UseSqlServer(connectionString);
-    }
+    options.UseSqlServer(builder.Configuration.GetConnectionString("conStr"));
 });
 
 // Add Identity
@@ -144,22 +130,6 @@ builder.Services.AddHealthChecks()
     .AddDbContextCheck<AppDbContext>("Database");
 
 var app = builder.Build();
-
-// Auto-apply migrations in production
-if (app.Environment.IsProduction())
-{
-    using var scope = app.Services.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    try
-    {
-        dbContext.Database.Migrate(); // Apply pending migrations
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while migrating the database.");
-    }
-}
 
 using (var scope = app.Services.CreateScope())
 {
