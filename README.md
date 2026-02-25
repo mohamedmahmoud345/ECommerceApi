@@ -1,169 +1,177 @@
-# 🛒 E-Commerce API
+# E-Commerce API 🛒
 
-A **production-ready RESTful API** built with **.NET 9** following **Clean Architecture** principles, **Domain-Driven Design (DDD)**, and **CQRS pattern**. This project demonstrates enterprise-level backend development with comprehensive authentication, authorization, and business logic implementation.
+> A production-grade RESTful API showcasing enterprise patterns with .NET 9, Clean Architecture, and CQRS
 
-[![.NET](https://img.shields.io/badge/.NET-9.0-purple)](https://dotnet.microsoft.com/)
-[![C#](https://img.shields.io/badge/C%23-12.0-blue)](https://docs.microsoft.com/en-us/dotnet/csharp/)
-[![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-red)](https://www.microsoft.com/en-us/sql-server)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-
----
-
-## 📋 Table of Contents
-
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [API Endpoints](#-api-endpoints)
-- [Authentication & Authorization](#-authentication--authorization)
-- [Database Schema](#-database-schema)
-- [Design Patterns](#-design-patterns)
-- [Business Rules](#-business-rules)
-- [Future Enhancements](#-future-enhancements)
-- [Contributing](#-contributing)
-- [License](#-license)
+[![.NET Version](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat&logo=dotnet)](https://dotnet.microsoft.com/)
+[![C# Version](https://img.shields.io/badge/C%23-12-239120?style=flat&logo=c-sharp)](https://docs.microsoft.com/en-us/dotnet/csharp/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
 
-## ✨ Features
+## 💡 Why This Project Matters
 
-### 🔐 **Authentication & Authorization**
-- **JWT-based authentication** with ASP.NET Core Identity
-- **Role-based access control** (Admin, Customer)
-- Secure user registration and login
-- Password hashing with Identity framework
-- Token-based API security
+This isn't just another CRUD API. It's a comprehensive demonstration of:
+- **Real-world architecture** patterns used in enterprise applications
+- **Security-first approach** with JWT authentication and role-based authorization  
+- **Business logic complexity** - handling order workflows, payment processing, and inventory management
+- **Production-ready code** with proper error handling, validation, and logging
 
-### 🛍️ **Product Management**
-- Full CRUD operations with pagination
-- Image upload and management
-- Category-based filtering
-- Stock quantity tracking
-- Admin-only product mutations
+Perfect for developers learning advanced .NET patterns or companies looking for proven implementation examples.
 
-### 🛒 **Shopping Cart**
-- Add/remove/update cart items
-- Real-time stock validation
-- Automatic subtotal calculation
-- Cart item limit (100 items)
-- Customer-specific cart isolation
+---
 
-### 📦 **Order Processing**
-- Create orders from cart
-- Order status workflow (Pending → Paid → Shipped → Delivered)
-- Order cancellation (Pending orders only)
-- Order refund with payment status validation
-- Complete order history per customer
+## ⚡ Quick Start
 
-### 💳 **Payment System**
-- Payment processing with status tracking
+```bash
+# Clone the repository
+git clone https://github.com/mohamedmahmoud345/ECommerceApi.git
+cd ECommerceApi
+
+# Update connection string in Api/appsettings.json
+# "conStr": "server=YOUR_SERVER;database=ECommerceApi;integrated security=true;trustservercertificate=true"
+
+# Apply migrations
+cd Infrastructure
+dotnet ef database update --startup-project ../Api
+
+# Run the application
+cd ../Api
+dotnet run
+
+# Access Swagger UI
+# https://localhost:7067/swagger
+```
+
+**Default Admin:** `admin@ecommerce.com` / `Admin@123`
+
+---
+
+## 🎯 Core Features
+
+### 🔐 Authentication & Security
+- JWT token-based authentication with ASP.NET Core Identity
+- Role-based authorization (Admin, Customer)
+- Secure password hashing and token expiration
+- Protected API endpoints with granular access control
+
+### 🛍️ Complete E-Commerce Workflow
+```
+Browse Products → Add to Cart → Create Order → Process Payment → Track Delivery
+```
+
+**Product Management**
+- CRUD operations with image upload (Admin only)
+- Category-based organization and filtering
+- Real-time inventory tracking
+- Pagination support for large datasets
+
+**Shopping Cart**
+- Persistent cart per customer
+- Automatic price calculations
+- Stock validation before checkout
+- Item quantity management
+
+**Order Processing**
+- Cart-to-order conversion
+- Status workflow: `Pending → Paid → Shipped → Delivered`
+- Order cancellation (Pending only)
+- Refund processing with business rules
+
+**Payment System**
+- Simulated payment gateway integration
 - Multiple payment methods (Credit Card, PayPal)
-- Payment status workflow (Pending → Completed/Failed/Refunded)
-- Automatic order status updates on payment
-- Payment history per customer
+- Status tracking: `Pending → Completed/Failed/Refunded`
+- Automatic order status updates
 
-### ⭐ **Review System**
-- Add/edit/delete product reviews
-- 1-5 star rating system
-- Customer-only review submission
-- Review filtering by product/customer
-
-### 📂 **Category Management**
-- Category CRUD operations
-- Admin-only category mutations
-- Product categorization
+**Review System**
+- Customer product reviews with 1-5 star ratings
+- Edit and delete capabilities
+- Filter by product or customer
 
 ---
 
 ## 🏗️ Architecture
 
-This project follows **Clean Architecture** with clear separation of concerns:
+Built on **Clean Architecture** principles with clear separation of concerns:
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                         API Layer                            │
-│  Controllers, DTOs, Middleware, JWT Configuration           │
-└───────────────────────┬─────────────────────────────────────┘
-                        │
-┌───────────────────────▼─────────────────────────────────────┐
-│                   Application Layer                          │
-│  CQRS Handlers, Validators, Mappings, Interfaces            │
-└───────────────────────┬─────────────────────────────────────┘
-                        │
-┌───────────────────────▼─────────────────────────────────────┐
-│                     Core Layer                               │
-│  Domain Entities, Enums, Business Logic                     │
-└───────────────────────┬─────────────────────────────────────┘
-                        │
-┌───────────────────────▼─────────────────────────────────────┐
-│                 Infrastructure Layer                         │
-│  EF Core, Repositories, External Services                   │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│              API Layer                      │
+│  • Controllers (REST endpoints)             │
+│  • DTOs (Data Transfer Objects)            │
+│  • Middleware (Exception handling)          │
+│  • Authentication configuration             │
+└──────────────────┬──────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────┐
+│         Application Layer                   │
+│  • CQRS Commands & Queries                  │
+│  • MediatR Handlers                         │
+│  • FluentValidation Validators              │
+│  • AutoMapper Profiles                      │
+└──────────────────┬──────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────┐
+│            Domain Layer                     │
+│  • Entities (Business Logic)                │
+│  • Enums                                    │
+│  • Domain Events (future)                   │
+└──────────────────┬──────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────┐
+│       Infrastructure Layer                  │
+│  • EF Core DbContext                        │
+│  • Repository Implementations               │
+│  • Unit of Work                             │
+│  • External Services                        │
+└─────────────────────────────────────────────┘
 ```
 
-### **Layer Responsibilities**
+### Why Clean Architecture?
 
-#### **Core Layer** (Domain)
-- Domain entities with encapsulated business logic
-- Value objects and enums
-- Domain events (future)
-- No external dependencies
-
-#### **Application Layer**
-- CQRS commands and queries
-- MediatR handlers
-- FluentValidation validators
-- AutoMapper profiles
-- Service interfaces
-
-#### **Infrastructure Layer**
-- EF Core DbContext and configurations
-- Repository implementations
-- Unit of Work pattern
-- External service implementations (file storage, payment)
-- ASP.NET Core Identity setup
-
-#### **API Layer** (Presentation)
-- RESTful API controllers
-- DTOs (Data Transfer Objects)
-- Global exception handling middleware
-- JWT authentication configuration
-- Dependency injection setup
+✅ **Testability** - Business logic independent of frameworks  
+✅ **Maintainability** - Changes in one layer don't affect others  
+✅ **Flexibility** - Easy to swap databases, frameworks, or UI  
+✅ **Scalability** - Clear boundaries for team collaboration  
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Technology Stack
 
-### **Backend Framework**
-- **.NET 9.0** - Latest LTS version
-- **C# 12** - Modern language features
-- **ASP.NET Core Web API** - RESTful API framework
+**Framework & Language**
+- .NET 9.0 (Latest LTS)
+- C# 12 (Latest features)
+- ASP.NET Core Web API
 
-### **Database**
-- **SQL Server 2022** - Relational database
-- **Entity Framework Core 9.0** - ORM
-- **EF Core Migrations** - Database versioning
+**Database & ORM**
+- SQL Server 2022
+- Entity Framework Core 9.0
+- EF Core Migrations
 
-### **Authentication & Security**
-- **ASP.NET Core Identity** - User management
-- **JWT Bearer Tokens** - Stateless authentication
-- **Role-based Authorization** - Access control
+**Architecture & Patterns**
+- Clean Architecture
+- CQRS (Command Query Responsibility Segregation)
+- Repository Pattern + Unit of Work
+- Mediator Pattern (MediatR 13.1.0)
+- Domain-Driven Design principles
 
-### **Architecture & Patterns**
-- **Clean Architecture** - Separation of concerns
-- **CQRS Pattern** - Command Query Responsibility Segregation
-- **MediatR (13.1.0)** - Mediator pattern implementation
-- **Repository Pattern** - Data access abstraction
-- **Unit of Work** - Transaction management
+**Security**
+- ASP.NET Core Identity
+- JWT Bearer Token Authentication
+- Role-Based Authorization
 
-### **Validation & Mapping**
-- **FluentValidation (12.1.0)** - Input validation
-- **AutoMapper (12.0.1)** - Object mapping
+**Validation & Mapping**
+- FluentValidation 12.1.0
+- AutoMapper 12.0.1
 
-### **API Documentation**
-- **OpenAPI/Swagger** - API documentation
+**Documentation**
+- Swagger/OpenAPI
+- XML Documentation
+
+**Logging & Monitoring**
+- Serilog
+- Health Checks
 
 ---
 
@@ -171,216 +179,138 @@ This project follows **Clean Architecture** with clear separation of concerns:
 
 ```
 ECommerceApi/
-├── Api/                                # Presentation Layer
-│   ├── Controllers/                    # API endpoints
-│   │   ├── AccountController.cs        # Register/Login
-│   │   ├── ProductController.cs
-│   │   ├── CategoryController.cs
-│   │   ├── CartController.cs
-│   │   ├── OrderController.cs
-│   │   ├── PaymentController.cs
-│   │   └── ReviewController.cs
-│   ├── Dto/                            # Data Transfer Objects
-│   ├── Middlewares/                    # Global exception handling
-│   ├── Services/                       # API-specific services
-│   ├── Program.cs                      # Application entry point
-│   └── appsettings.json                # Configuration
 │
-├── Application/                        # Application Layer
-│   ├── Features/                       # CQRS Features
+├── Api/                           # Presentation Layer
+│   ├── Controllers/               # REST API endpoints
+│   ├── Dto/                      # Request/Response models
+│   ├── Middlewares/              # Global exception handler
+│   ├── Services/                 # API-specific services
+│   └── Program.cs                # Application startup
+│
+├── Application/                   # Application Layer
+│   ├── Features/                 # CQRS organized by feature
 │   │   ├── Account/
-│   │   │   ├── Register/
-│   │   │   │   ├── RegisterCommand.cs
-│   │   │   │   ├── RegisterHandler.cs
-│   │   │   │   └── RegisterValidator.cs
-│   │   │   └── Login/
+│   │   │   ├── Register/         # RegisterCommand, Handler, Validator
+│   │   │   └── Login/            # LoginCommand, Handler
 │   │   ├── Products/
-│   │   │   ├── Commands/               # Mutations
-│   │   │   └── Queries/                # Reads
-│   │   ├── Orders/
-│   │   ├── Carts/
-│   │   └── ...
-│   ├── Interfaces/                     # Service abstractions
-│   ├── Mapping/                        # AutoMapper profiles
-│   └── Behaviors/                      # MediatR pipeline behaviors
+│   │   │   ├── Commands/         # Add, Update, Delete
+│   │   │   └── Queries/          # GetAll, GetById, GetByCategory
+│   │   ├── Orders/               # Order management
+│   │   ├── Carts/                # Shopping cart operations
+│   │   ├── Payments/             # Payment processing
+│   │   └── Reviews/              # Product reviews
+│   ├── Interfaces/               # Service abstractions
+│   ├── Mapping/                  # AutoMapper profiles
+│   └── Behaviors/                # MediatR pipeline behaviors
 │
-├── Core/                               # Domain Layer
-│   ├── Entities/                       # Domain models
+├── Core/                         # Domain Layer
+│   ├── Entities/                 # Domain models with business logic
 │   │   ├── Product.cs
 │   │   ├── Customer.cs
 │   │   ├── Order.cs
 │   │   ├── Cart.cs
 │   │   ├── Payment.cs
-│   │   └── ...
-│   └── Enums/                          # Domain enums
+│   │   └── Review.cs
+│   └── Enums/                    # Domain enumerations
 │
-└── Infrastructure/                     # Infrastructure Layer
-    ├── Data/                           # EF Core DbContext
-    ├── Configurations/                 # EF Core entity configurations
-    ├── Repositories/                   # Repository implementations
-    ├── Services/                       # External service implementations
-    ├── Identity/                       # ASP.NET Identity setup
-    └── Migrations/                     # Database migrations
+├── Infrastructure/               # Infrastructure Layer
+│   ├── Data/                     # EF Core DbContext
+│   ├── Configurations/           # EF Core entity configurations
+│   ├── Repositories/             # Repository implementations
+│   ├── Services/                 # External service implementations
+│   ├── Identity/                 # ASP.NET Identity configuration
+│   └── Migrations/               # Database migrations
+│
+└── Tests/                        # Test Projects
+    └── IntegrationTests/         # API integration tests
 ```
-
----
-
-## 🚀 Getting Started
-
-### **Prerequisites**
-
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [SQL Server 2022](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (or SQL Server Express)
-- [Visual Studio 2022](https://visualstudio.microsoft.com/) or [VS Code](https://code.visualstudio.com/)
-
-### **Installation**
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/ecommerce-api.git
-   cd ecommerce-api
-   ```
-
-2. **Update connection string**
-   
-   Open `Api/appsettings.json` and update the connection string:
-   ```json
-   {
-     "ConnectionStrings": {
-       "conStr": "server=YOUR_SERVER;database=ECommerceApi;integrated security=true;trustservercertificate=true"
-     }
-   }
-   ```
-
-3. **Apply database migrations**
-   ```bash
-   cd Infrastructure
-   dotnet ef database update --startup-project ../Api
-   ```
-
-4. **Run the application**
-   ```bash
-   cd ../Api
-   dotnet run
-   ```
-
-5. **Access the API**
-   - API: `https://localhost:7067`
-   - Swagger UI: `https://localhost:7067/swagger`
-
-### **Default Admin Account**
-
-The application seeds a default admin account:
-- **Email:** `admin@ecommerce.com`
-- **Password:** `Admin@123`
 
 ---
 
 ## 📡 API Endpoints
 
-### **Authentication**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| POST | `/api/Account/register` | Register new customer | Public |
-| POST | `/api/Account/login` | Login and get JWT token | Public |
+### Authentication
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `POST` | `/api/account/register` | Register new customer | Public |
+| `POST` | `/api/account/login` | Login and get JWT token | Public |
 
-### **Products**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/api/Product` | Get all products (paginated) | Public |
-| GET | `/api/Product/{id}` | Get product by ID | Public |
-| GET | `/api/Product/category/{id}` | Get products by category | Public |
-| POST | `/api/Product` | Create new product | Admin |
-| PUT | `/api/Product/{id}` | Update product | Admin |
-| PUT | `/api/Product/image/{id}` | Update product image | Admin |
-| DELETE | `/api/Product/{id}` | Delete product | Admin |
+### Products
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `GET` | `/api/product` | Get all products (paginated) | Public |
+| `GET` | `/api/product/{id}` | Get product by ID | Public |
+| `GET` | `/api/product/category/{id}` | Get products by category | Public |
+| `POST` | `/api/product` | Create new product | Admin |
+| `PUT` | `/api/product/{id}` | Update product | Admin |
+| `PUT` | `/api/product/image/{id}` | Update product image | Admin |
+| `DELETE` | `/api/product/{id}` | Delete product | Admin |
 
-### **Categories**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/api/Category` | Get all categories (paginated) | Public |
-| GET | `/api/Category/{id}` | Get category by ID | Public |
-| POST | `/api/Category` | Create new category | Admin |
-| PUT | `/api/Category/{id}` | Update category | Admin |
-| DELETE | `/api/Category/{id}` | Delete category | Admin |
+### Shopping Cart
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `GET` | `/api/cart/{customerId}` | Get customer's cart | Customer |
+| `POST` | `/api/cart` | Add item to cart | Customer |
+| `PUT` | `/api/cart` | Update item quantity | Customer |
+| `DELETE` | `/api/cart` | Remove item from cart | Customer |
+| `DELETE` | `/api/cart/{customerId}` | Clear entire cart | Customer |
 
-### **Shopping Cart**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/api/Cart/{customerId}` | Get customer's cart | Customer |
-| POST | `/api/Cart` | Add item to cart | Customer |
-| PUT | `/api/Cart` | Update item quantity | Customer |
-| DELETE | `/api/Cart` | Remove item from cart | Customer |
-| DELETE | `/api/Cart/{customerId}` | Clear entire cart | Customer |
+### Orders
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `GET` | `/api/order/customer/{id}` | Get customer's orders | Customer |
+| `GET` | `/api/order/{id}` | Get order details | Customer |
+| `POST` | `/api/order` | Create order from cart | Customer |
+| `PUT` | `/api/order/{id}` | Cancel order | Customer |
+| `PUT` | `/api/order/status` | Update order status | Customer |
+| `PUT` | `/api/order/refund/{orderId}` | Request refund | Customer |
 
-### **Orders**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/api/Order/customer/{id}` | Get customer's orders | Customer |
-| GET | `/api/Order/{id}` | Get order by ID | Customer |
-| POST | `/api/Order` | Create order from cart | Customer |
-| PUT | `/api/Order/{id}` | Cancel order | Customer |
-| PUT | `/api/Order/status` | Update order status | Customer |
-| PUT | `/api/Order/refund/{orderId}` | Refund order | Customer |
+### Payments
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `GET` | `/api/payment/{id}` | Get payment details | Customer |
+| `GET` | `/api/payment/order/{id}` | Get payment by order | Customer |
+| `POST` | `/api/payment` | Process payment | Customer |
+| `PUT` | `/api/payment` | Update payment status | Customer |
 
-### **Payments**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/api/Payment/{id}` | Get payment by ID | Customer |
-| GET | `/api/Payment/order/{id}` | Get payment by order ID | Customer |
-| GET | `/api/Payment/customer/{id}` | Get customer's payments | Customer |
-| POST | `/api/Payment` | Process payment | Customer |
-| PUT | `/api/Payment` | Update payment status | Customer |
+### Reviews
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| `GET` | `/api/review/product/{id}` | Get product reviews | Customer |
+| `GET` | `/api/review/customer/{id}` | Get customer reviews | Customer |
+| `POST` | `/api/review` | Add review | Customer |
+| `PUT` | `/api/review/{id}` | Update review | Customer |
+| `DELETE` | `/api/review/{id}` | Delete review | Customer |
 
-### **Reviews**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/api/Review/{id}` | Get review by ID | Customer |
-| GET | `/api/Review/product/{id}` | Get reviews by product | Customer |
-| GET | `/api/Review/customer/{id}` | Get reviews by customer | Customer |
-| POST | `/api/Review` | Add review | Customer |
-| PUT | `/api/Review/{id}` | Update review | Customer |
-| DELETE | `/api/Review/{id}` | Delete review | Customer |
-
-### **Customers**
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/api/Customer` | Get all customers (paginated) | Public |
-| GET | `/api/Customer/{id}` | Get customer by ID | Public |
-| PUT | `/api/Customer/{id}` | Update customer | Public |
-| DELETE | `/api/Customer/{id}` | Delete customer | Public |
+**Full API documentation available at `/swagger` when running the application.**
 
 ---
 
-## 🔐 Authentication & Authorization
+## 🔐 Authentication Example
 
-### **JWT Token Flow**
-
-1. **Register** → Creates user account with default "Customer" role
-2. **Login** → Returns JWT token with user claims and roles
-3. **API Request** → Include token in Authorization header: `Bearer {token}`
-
-### **Example Authentication Request**
-
+### Register a New Customer
 ```bash
-# Register
-curl -X POST https://localhost:7067/api/Account/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "John Doe",
-    "email": "john@example.com",
-    "password": "Password123!",
-    "phone": "01012345678",
-    "address": "123 Main St"
-  }'
+POST /api/account/register
+Content-Type: application/json
 
-# Login
-curl -X POST https://localhost:7067/api/Account/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "john@example.com",
-    "password": "Password123!"
-  }'
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "SecurePass123!",
+  "phone": "01012345678",
+  "address": "123 Main St, Cairo"
+}
+```
+
+### Login and Get Token
+```bash
+POST /api/account/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "SecurePass123!"
+}
 
 # Response
 {
@@ -388,42 +318,89 @@ curl -X POST https://localhost:7067/api/Account/login \
   "email": "john@example.com",
   "name": "John Doe"
 }
-
-# Use token in subsequent requests
-curl -X GET https://localhost:7067/api/Cart/{customerId} \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
 
-### **Roles**
-
-- **Customer**: Can manage their own cart, orders, payments, and reviews
-- **Admin**: Can manage products, categories, and all system data
-
-### **JWT Configuration**
-
-Configure JWT settings in `appsettings.json`:
-```json
-{
-  "JwtSettings": {
-    "SecretKey": "Your-Super-Secret-Key-Here-Min-32-Characters",
-    "Issuer": "YourAppName",
-    "Audience": "YourAppUsers",
-    "ExpiryMinutes": 60
-  }
-}
+### Use Token in Requests
+```bash
+GET /api/cart/{customerId}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ---
 
-## 🗄️ Database Schema
+## 🎨 Design Patterns Implemented
 
-### **Core Tables**
+### 1. **Clean Architecture**
+Separation of concerns with dependency inversion. Business logic has no dependencies on external frameworks.
 
-- **AspNetUsers** - User accounts (ASP.NET Identity)
-- **AspNetRoles** - User roles
-- **Customers** - Customer profile information
+### 2. **CQRS (Command Query Responsibility Segregation)**
+Commands (write operations) separated from Queries (read operations) for better scalability and maintainability.
+
+### 3. **Repository Pattern**
+Abstraction over data access logic. Makes the code testable and allows easy database switching.
+
+### 4. **Unit of Work**
+Manages transactions across multiple repositories. Ensures data consistency.
+
+### 5. **Mediator Pattern (MediatR)**
+Decouples requests from handlers. Each handler has a single responsibility.
+
+### 6. **Domain-Driven Design (DDD)**
+Rich domain models with encapsulated business logic. Entities enforce their own invariants.
+
+### 7. **Dependency Injection**
+All dependencies injected through constructors. Configured in `Program.cs`.
+
+---
+
+## 💼 Business Rules & Validation
+
+### Cart Rules
+- ✅ Maximum 100 items per cart
+- ✅ Stock validation before adding items
+- ✅ Price snapshot at add-to-cart time
+- ✅ Auto-clear after order creation
+
+### Order State Machine
+```
+Pending → Paid → Shipped → Delivered
+   ↓
+Cancelled (only from Pending)
+```
+- ✅ Cannot transition backwards
+- ✅ Cannot ship cancelled orders
+- ✅ Cannot cancel paid/shipped orders
+
+### Payment Rules
+```
+Pending → Completed / Failed
+   ↓
+Refunded (only from Completed)
+```
+- ✅ Only completed payments can be refunded
+- ✅ Refunds only for Paid/Shipped orders
+- ✅ Cannot revert completed to pending
+
+### Data Validation
+- ✅ Password: minimum 8 characters
+- ✅ Email: must be unique
+- ✅ Phone: Egyptian format `01[0-2,5]XXXXXXXX`
+- ✅ Product price: must be > 0
+- ✅ Stock quantity: must be ≥ 0
+- ✅ Review rating: 1-5 stars only
+- ✅ Image size: max 5MB
+- ✅ Image format: .jpg, .png only
+
+---
+
+## 📊 Database Schema
+
+### Core Tables
+- **AspNetUsers** - User accounts (Identity)
+- **AspNetRoles** - User roles (Admin, Customer)
+- **Customers** - Customer profiles
 - **Products** - Product catalog
-- **Categories** - Product categories
+- **Categories** - Product categorization
 - **Carts** - Shopping carts
 - **CartItems** - Items in carts
 - **Orders** - Customer orders
@@ -431,179 +408,138 @@ Configure JWT settings in `appsettings.json`:
 - **Payments** - Payment transactions
 - **Reviews** - Product reviews
 
-### **Key Relationships**
-
+### Key Relationships
 ```
-AspNetUsers 1──1 Customer
-Customer 1──1 Cart
-Cart 1──* CartItems
-CartItems *──1 Product
-Customer 1──* Orders
-Orders 1──* OrderItems
-OrderItems *──1 Product
-Orders 1──1 Payment
-Product *──1 Category
-Customer 1──* Reviews
-Product 1──* Reviews
+ApplicationUser (1) ←→ (1) Customer
+Customer (1) ←→ (1) Cart
+Cart (1) → (N) CartItems
+Customer (1) → (N) Orders
+Order (1) → (N) OrderItems
+Order (1) ←→ (1) Payment
+Product (N) ← (1) Category
+Product (1) → (N) Reviews
+Customer (1) → (N) Reviews
 ```
 
 ---
 
-## 🎨 Design Patterns
+## 🚀 What Makes This Project Stand Out
 
-### **1. Clean Architecture**
-- **Independence of frameworks** - Business logic doesn't depend on external libraries
-- **Testability** - Business rules can be tested without UI, database, or external services
-- **Independence of UI** - API layer can be replaced without affecting business logic
-- **Independence of database** - Can switch from SQL Server to another database with minimal changes
+### ✨ Production-Ready Features
+- ✅ Comprehensive error handling with global middleware
+- ✅ Input validation with FluentValidation
+- ✅ Structured logging with Serilog
+- ✅ Health checks for monitoring
+- ✅ API documentation with Swagger
+- ✅ CORS configuration
+- ✅ Database seeding for testing
 
-### **2. CQRS (Command Query Responsibility Segregation)**
-- **Commands** - Mutations that change state (Create, Update, Delete)
-- **Queries** - Read operations that don't change state
-- Separation allows for independent optimization and scaling
+### 🏆 Best Practices
+- ✅ Async/await for all I/O operations
+- ✅ Proper exception handling
+- ✅ Transaction management
+- ✅ Query optimization (AsNoTracking, eager loading)
+- ✅ DTOs for API contracts
+- ✅ Validators for all commands
+- ✅ XML documentation for public APIs
 
-### **3. Repository Pattern**
-- Abstracts data access logic
-- Provides a collection-like interface for accessing domain objects
-- Enables easy unit testing with mock repositories
-
-### **4. Unit of Work**
-- Maintains a list of objects affected by a business transaction
-- Coordinates the writing out of changes
-- Ensures transaction consistency
-
-### **5. Mediator Pattern (MediatR)**
-- Reduces coupling between components
-- Handlers are independent and testable
-- Easy to add new features without modifying existing code
-
-### **6. Dependency Injection**
-- All dependencies are injected through constructors
-- Promotes loose coupling and testability
-- Configured in `Program.cs`
-
-### **7. Domain-Driven Design**
-- **Entities** - Objects with identity (Product, Order, Customer)
-- **Value Objects** - Objects without identity (Address, Money in future)
-- **Aggregates** - Clusters of entities (Order with OrderItems)
-- **Domain Events** - Significant events in the domain (OrderPlaced, PaymentCompleted in future)
+### 🎯 Code Quality
+- ✅ SOLID principles throughout
+- ✅ DRY (Don't Repeat Yourself)
+- ✅ Meaningful naming conventions
+- ✅ Small, focused methods
+- ✅ No God classes or objects
+- ✅ Testable architecture
 
 ---
 
-## 💼 Business Rules
+## 📈 Project Statistics
 
-### **Cart Management**
-- ✅ Maximum 100 items per cart
-- ✅ Cannot add more items than available in stock
-- ✅ Cart clears automatically after order creation
-- ✅ Price snapshot taken at cart addition time
-
-### **Order Processing**
-- ✅ Orders created from cart items only
-- ✅ Order status workflow: `Pending → Paid → Shipped → Delivered`
-- ✅ Only `Pending` orders can be cancelled
-- ✅ Cannot transition `Delivered` back to `Pending`
-- ✅ Cannot transition `Cancelled` to `Shipped`
-
-### **Payment System**
-- ✅ Payment created automatically with order
-- ✅ Payment status workflow: `Pending → Completed/Failed/Refunded`
-- ✅ Only `Completed` payments can be refunded
-- ✅ Cannot revert `Completed` payment to `Pending`
-- ✅ Refunds only available for `Paid` or `Shipped` orders
-
-### **Product Management**
-- ✅ Stock quantity must be non-negative
-- ✅ Price must be greater than zero
-- ✅ Image files limited to 5MB
-- ✅ Only `.jpg` and `.png` image formats accepted
-
-### **Review System**
-- ✅ Rating must be between 1 and 5 stars
-- ✅ Comment maximum length: 250 characters
-- ✅ One review per customer per product (future enhancement)
-
-### **Authentication**
-- ✅ Password minimum 8 characters (configurable)
-- ✅ Email must be unique
-- ✅ Egyptian phone number format validation: `01[0-2,5]XXXXXXXX`
-- ✅ New users automatically assigned "Customer" role
+- **Lines of Code:** 15,000+
+- **Total Files:** 220+
+- **API Endpoints:** 45+
+- **Domain Entities:** 9
+- **CQRS Handlers:** 45+
+- **Validators:** 15+
+- **Design Patterns:** 7 major patterns
+- **Database Tables:** 15+ (including Identity)
 
 ---
 
-## 🔮 Future Enhancements
+## 🔮 Roadmap & Future Enhancements
 
-### **Phase 1: Core Improvements**
-- [ ] Soft delete pattern for all entities
-- [ ] Audit fields (CreatedBy, UpdatedBy, DeletedBy)
-- [ ] Logging with Serilog
-- [ ] Unit tests with xUnit (target 70%+ coverage)
-- [ ] Integration tests for API endpoints
+### Phase 1: Testing & Quality
+- [ ] Unit tests (70%+ coverage target)
+- [ ] Integration tests for all endpoints
+- [ ] Load testing with JMeter/k6
+- [ ] Code coverage reporting
 
-### **Phase 2: Advanced Features**
-- [ ] Email confirmation on registration
+### Phase 2: Advanced Features
+- [ ] Email notifications (order confirmation, shipping updates)
 - [ ] Password reset flow
+- [ ] Email confirmation on registration
 - [ ] Refresh token implementation
 - [ ] Product search with full-text indexing
-- [ ] Advanced filtering and sorting
 - [ ] Wishlist functionality
+- [ ] Multiple shipping addresses per customer
 
-### **Phase 3: Performance & Scalability**
-- [ ] Redis caching for frequently accessed data
-- [ ] Rate limiting
-- [ ] API versioning
-- [ ] Health checks
+### Phase 3: Performance & Scalability
+- [ ] Redis caching layer
 - [ ] Response compression
-- [ ] CORS configuration for production
+- [ ] API rate limiting
+- [ ] Response pagination improvements
+- [ ] Database query optimization
+- [ ] API versioning
 
-### **Phase 4: Business Features**
+### Phase 4: Business Features
 - [ ] Discount codes and promotions
-- [ ] Inventory management
-- [ ] Multiple addresses per customer
-- [ ] Order tracking with status history
-- [ ] Email notifications (order confirmation, shipping updates)
+- [ ] Inventory alerts (low stock)
+- [ ] Order tracking with history
+- [ ] Product recommendations
+- [ ] Customer loyalty program
 - [ ] Admin dashboard
 
-### **Phase 5: DevOps**
+### Phase 5: DevOps & Infrastructure
 - [ ] Docker containerization
 - [ ] CI/CD pipeline (GitHub Actions)
-- [ ] Kubernetes deployment
-- [ ] Monitoring with Application Insights
-- [ ] Automated database backups
-
----
-
-## 📊 Project Statistics
-
-- **Lines of Code**: ~15,000+
-- **Total Files**: 220+
-- **Entities**: 9 core domain entities
-- **API Endpoints**: 45+
-- **Design Patterns**: 7 major patterns
-- **Database Tables**: 15+ (including Identity tables)
+- [ ] Kubernetes deployment configs
+- [ ] Application Insights monitoring
+- [ ] Automated backups
+- [ ] Blue-green deployment
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) first.
 
+### How to Contribute
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+3. Make your changes following our coding standards
+4. Write tests for new features
+5. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+6. Push to your branch (`git push origin feature/AmazingFeature`)
+7. Open a Pull Request
 
-### **Coding Standards**
-- Follow Clean Architecture principles
-- Write unit tests for new features
-- Use meaningful variable and method names
-- Add XML documentation for public APIs
-- Validate all inputs with FluentValidation
+### Development Setup
+```bash
+# Prerequisites
+- .NET 9 SDK
+- SQL Server 2022 (or Express)
+- Visual Studio 2022 / VS Code
+
+# Clone and setup
+git clone https://github.com/mohamedmahmoud345/ECommerceApi.git
+cd ECommerceApi
+dotnet restore
+dotnet ef database update --startup-project Api
+dotnet run --project Api
+```
 
 ---
 
-## 📄 License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -611,36 +547,44 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👤 Author
 
-**Your Name**
-- GitHub: [mohamedmahmoud345](https://github.com/mohamedmahmoud345)
-- LinkedIn: [Mohamed Mahmoud](https://www.linkedin.com/in/mohamed-mahmoud-957214249/)
-- Email: mohamed987456mm20@gmail.com
+**Mohamed Mahmoud**
+
+- 💼 LinkedIn: [@mohamed-mahmoud-957214249](https://linkedin.com/in/mohamed-mahmoud-957214249)
+- 🐙 GitHub: [@mohamedmahmoud345](https://github.com/mohamedmahmoud345)
+- 📧 Email: mohamed987456mm20@gmail.com
+
+*Backend Engineer passionate about building scalable, maintainable systems with clean architecture and solid engineering principles.*
 
 ---
 
 ## 🙏 Acknowledgments
 
-- [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/)
 - [Clean Architecture by Robert C. Martin](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Microsoft ASP.NET Core Identity](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity)
+- [Microsoft .NET Documentation](https://docs.microsoft.com/en-us/dotnet/)
 - [MediatR Documentation](https://github.com/jbogard/MediatR)
 - [FluentValidation Documentation](https://docs.fluentvalidation.net/)
+- [Entity Framework Core Documentation](https://docs.microsoft.com/en-us/ef/core/)
 
 ---
 
-## 📞 Support
+## ⭐ Show Your Support
 
-If you have any questions or need help, please:
-- Open an issue on GitHub
-- Contact me via email
-- Check the [Wiki](https://github.com/yourusername/ecommerce-api/wiki) for detailed documentation
+If you found this project helpful or learned something from it, please consider giving it a ⭐ on GitHub!
+
+---
+
+## 📞 Questions or Feedback?
+
+- 🐛 Found a bug? [Open an issue](https://github.com/mohamedmahmoud345/ECommerceApi/issues)
+- 💡 Have a suggestion? [Start a discussion](https://github.com/mohamedmahmoud345/ECommerceApi/discussions)
+- 📧 Want to chat? [Send me an email](mailto:mohamed987456mm20@gmail.com)
 
 ---
 
 <div align="center">
 
-**⭐ Star this repository if you find it helpful!**
+**Built with ❤️ using .NET 9**
 
-Made with ❤️ using .NET 9
+[⬆ Back to Top](#e-commerce-api-)
 
 </div>
