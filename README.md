@@ -5,7 +5,6 @@
 [![.NET Version](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat&logo=dotnet)](https://dotnet.microsoft.com/)
 [![C# Version](https://img.shields.io/badge/C%23-12-239120?style=flat&logo=c-sharp)](https://docs.microsoft.com/en-us/dotnet/csharp/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ---
 
@@ -455,8 +454,6 @@ Customer (1) → (N) Reviews
 
 ## 📈 Project Statistics
 
-- **Lines of Code:** 15,000+
-- **Total Files:** 220+
 - **API Endpoints:** 45+
 - **Domain Entities:** 9
 - **CQRS Handlers:** 45+
@@ -511,16 +508,14 @@ Customer (1) → (N) Reviews
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) first.
+Contributions and feedback are welcome! Feel free to open an issue or submit a pull request.
 
 ### How to Contribute
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Make your changes following our coding standards
-4. Write tests for new features
-5. Commit your changes (`git commit -m 'Add AmazingFeature'`)
-6. Push to your branch (`git push origin feature/AmazingFeature`)
-7. Open a Pull Request
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to your branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ### Development Setup
 ```bash
