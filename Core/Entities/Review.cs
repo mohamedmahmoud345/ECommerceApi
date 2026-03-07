@@ -11,7 +11,7 @@
             if (rating < 1 || rating > 5)
                 throw new ArgumentException(nameof(rating));
             Rating = rating;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
             CustomerId = customerId;
             ProductId = productId;
         }

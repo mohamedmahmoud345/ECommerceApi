@@ -18,7 +18,7 @@ namespace Core.Entities
         public string Name { get; private set; }
         public string Description { get; private set; }
         public DateTime CreatedAt { get; private set; }
-        public void UpdateDescription(string description) => Description = description;
+        
         public void Rename(string newName)
         {
             if (string.IsNullOrWhiteSpace(newName))

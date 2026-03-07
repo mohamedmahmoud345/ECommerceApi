@@ -11,7 +11,7 @@
                 throw new ArgumentOutOfRangeException(nameof(quantity));
 
             Quantity = quantity;
-            if (UnitPrice < 0)
+            if (unitPrice < 0)
                 throw new ArgumentException(nameof(UnitPrice));
             UnitPrice = unitPrice;
             CreatedAt = DateTime.UtcNow;
