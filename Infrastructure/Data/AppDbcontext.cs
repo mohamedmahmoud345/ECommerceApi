@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class AppDbContext : 
+    public class AppDbContext :
         IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public DbSet<Cart> Carts { get; set; }
@@ -18,6 +18,7 @@ namespace Infrastructure.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public AppDbContext()
         {
         }
