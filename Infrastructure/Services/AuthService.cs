@@ -56,5 +56,14 @@ namespace Infrastructure.Services
 
             return await _userMang.GetRolesAsync(user);
         }
+
+        public async Task<(bool Found, string Email, string UserName)> GetUserInfoAsync(Guid userId)
+        {
+            var user = await _userMang.FindByIdAsync(userId.ToString());
+            if (user == null)
+                return (false, string.Empty, string.Empty);
+
+            return (true, user.Email!, user.UserName!);
+        }
     }
 }

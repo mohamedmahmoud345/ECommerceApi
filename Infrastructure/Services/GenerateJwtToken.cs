@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Application.Interfaces.Services.GenerateToken;
 using Microsoft.Extensions.Configuration;
@@ -43,6 +44,17 @@ namespace Infrastructure.Services
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public (string Token, DateTime ExpiresOnUtc) GenerateRefreshToken()
+        {
+            var jwtSettings = _confg.GetSection("JwtSettings");
+            var expiryDays = int.Parse(jwtSettings["RefreshTokenExpiryDays"]!);
+
+            var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+            var expiry = DateTime.UtcNow.AddDays(expiryDays);
+
+            return (token, expiry);
         }
     }
 }

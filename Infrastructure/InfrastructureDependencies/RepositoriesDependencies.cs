@@ -26,6 +26,7 @@ namespace Infrastructure.Dependecies
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IGenerateJwtToken, GenerateJwtToken>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             return services;
         }
     }
