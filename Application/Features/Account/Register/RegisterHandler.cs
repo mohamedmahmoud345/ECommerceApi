@@ -1,3 +1,4 @@
+using Application.Interfaces.IRepositories;
 using Application.Interfaces.Services;
 using Application.Interfaces.Services.GenerateToken;
 using Application.IUnitOfWorks;
@@ -12,11 +13,18 @@ namespace Application.Features.Account.Register
         private readonly IUnitOfWork _unitOfWork;
         private readonly IGenerateJwtToken _jwtToken;
         private readonly IAuthService _authService;
-        public RegisterHandler(IUnitOfWork unitOfWork, IGenerateJwtToken jwtToken, IAuthService authService)
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
+
+        public RegisterHandler(
+            IUnitOfWork unitOfWork,
+            IGenerateJwtToken jwtToken,
+            IAuthService authService,
+            IRefreshTokenRepository refreshTokenRepository)
         {
             _unitOfWork = unitOfWork;
             _jwtToken = jwtToken;
             _authService = authService;
+            _refreshTokenRepository = refreshTokenRepository;
         }
         public async Task<AuthResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
@@ -47,13 +55,18 @@ namespace Application.Features.Account.Register
             var tokenRequest =
                 new TokenRequestDto(authResult.UserId, request.Email, request.Name, userRoles);
 
-            var token = _jwtToken.GenerateToken(tokenRequest);
+            var accessToken = _jwtToken.GenerateToken(tokenRequest);
+            var (refreshToken, refreshTokenExpiry) = _jwtToken.GenerateRefreshToken();
+
+            await _refreshTokenRepository.AddAsync(authResult.UserId, refreshToken, refreshTokenExpiry);
 
             return new AuthResponse()
             {
-                Token = token,
+                Token = accessToken,
                 Email = request.Email,
-                Name = request.Name
+                Name = request.Name,
+                RefreshToken = refreshToken,
+                RefreshTokenExpiry = refreshTokenExpiry
             };
         }
     }
