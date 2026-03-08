@@ -1,7 +1,10 @@
 using Api.Dto.Account;
 using Application.Features.Account.Login;
+using Application.Features.Account.Logout;
+using Application.Features.Account.Refresh;
 using Application.Features.Account.Register;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -19,7 +22,7 @@ namespace Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
-            var RegisterCommand = new RegisterCommand()
+            var registerCommand = new RegisterCommand()
             {
                 Name = registerDto.Name,
                 Email = registerDto.Email,
@@ -28,7 +31,7 @@ namespace Api.Controllers
                 Address = registerDto.Address
             };
 
-            var result = await _mediator.Send(RegisterCommand);
+            var result = await _mediator.Send(registerCommand);
             if (result is null)
                 return BadRequest();
 
@@ -49,6 +52,32 @@ namespace Api.Controllers
                 return BadRequest();
 
             return Ok(result);
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh(RefreshDto refreshDto)
+        {
+            var result = await _mediator.Send(new RefreshCommand
+            {
+                RefreshToken = refreshDto.RefreshToken
+            });
+
+            if (result is null)
+                return Unauthorized();
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout(LogoutDto logoutDto)
+        {
+            await _mediator.Send(new LogoutCommand
+            {
+                RefreshToken = logoutDto.RefreshToken
+            });
+
+            return NoContent();
         }
     }
 }
