@@ -134,11 +134,25 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+    var logger = services.GetRequiredService<ILogger<Program>>();
 
-    await RoleSeeder.SeedRolesAsync(roleManager);
-    await RoleSeeder.SeedAdminUserAsync(userManager, roleManager);
+    try
+    {
+        var db = services.GetRequiredService<AppDbContext>();
+        var strategy = db.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () => await db.Database.MigrateAsync());
+
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+        await RoleSeeder.SeedRolesAsync(roleManager);
+        await RoleSeeder.SeedAdminUserAsync(userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Error during database migration/seeding");
+        throw;
+    }
 }
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
